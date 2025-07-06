@@ -1,0 +1,103 @@
+import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Res } from '@nestjs/common';
+import { TaskService } from './task.service';
+import { CreateTaskDto } from 'src/dto/create-task.dto';
+import { UpdateTaskDto } from 'src/dto/update-task.dto';
+
+@Controller('task')
+export class TaskController {
+
+  constructor(private readonly taskService: TaskService) { }
+  /**
+   * Creates a new task.
+   * @param response - The response object to send the result.
+   * @param createTaskDto - The data transfer object containing task details.
+   * @returns A JSON response with the status and created task data.
+   */
+  @Post()
+  async createTask(@Res() response, @Body() createTaskDto: CreateTaskDto) {
+    try {
+      const newTask = await this.taskService.createTask(createTaskDto);
+      return response.status(HttpStatus.CREATED).json({
+        message: 'Task has been created successfully',
+        newTask,
+      });
+    } catch (err) {
+      return response.status(HttpStatus.BAD_REQUEST).json({
+        statusCode: 400,
+        message: 'Error: Task not created!',
+        error: 'Bad Request'
+      });
+    }
+  }
+  /**
+   * Updates an existing task by ID.
+   * @param response - The response object to send the result.
+   * @param taskId - The ID of the task to update.
+   * @param updateTaskDto - The data transfer object containing updated task details.
+   * @returns A JSON response with the status and updated task data.
+   */
+  @Put('/:id')
+  async updateTask(@Res() response, @Param('id') taskId: string,
+    @Body() updateTaskDto: UpdateTaskDto) {
+    try {
+      const existingTask = await this.taskService.updateTask(taskId, updateTaskDto);
+      return response.status(HttpStatus.OK).json({
+        message: 'Task has been successfully updated',
+        existingTask,
+      });
+    } catch (err) {
+      return response.status(err.status).json(err.response);
+    }
+  }
+  /**
+   * Retrieves all tasks.
+   * @param response - The response object to send the result.
+   * @returns A JSON response with the status and all task data.
+   */
+  @Get()
+  async getTasks(@Res() response) {
+    try {
+      const taskData = await this.taskService.getAllTasks();
+      return response.status(HttpStatus.OK).json({
+        message: 'All tasks data found successfully', taskData,
+      });
+    } catch (err) {
+      return response.status(err.status).json(err.response);
+    }
+  }
+  /**
+   * Retrieves a task by ID.
+   * @param response - The response object to send the result.
+   * @param taskId - The ID of the task to retrieve.
+   * @returns A JSON response with the status and found task data.
+   */
+  @Get('/:id')
+  async getTask(@Res() response, @Param('id') taskId: string) {
+    try {
+      const existingTask = await this.taskService.getTask(taskId);
+      return response.status(HttpStatus.OK).json({
+        message: 'Task found successfully', existingTask,
+      });
+    } catch (err) {
+      return response.status(err.status).json(err.response);
+    }
+  }
+  /**
+   * Deletes a task by ID.
+   * @param response - The response object to send the result.
+   * @param taskId - The ID of the task to delete.
+   * @returns A JSON response with the status and deleted task data.
+   */
+  @Delete('/:id')
+  async deleteTask(@Res() response, @Param('id') taskId: string) {
+    try {
+      const deletedTask = await this.taskService.deleteTask(taskId);
+      return response.status(HttpStatus.OK).json({
+        message: 'Task deleted successfully',
+        deletedTask,
+      });
+    } catch (err) {
+      return response.status(err.status).json(err.response);
+    }
+  }
+}
