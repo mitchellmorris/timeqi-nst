@@ -60,6 +60,10 @@ export class UserService {
     }
     return existingUser;
   }
+
+  findOneByEmail(email: string): Promise<IUser | null> {
+    return this.userModel.findOne({ email }).exec();
+  }
   /**
    * Deletes a user by their ID.
    * @param userId - The ID of the user to delete.
