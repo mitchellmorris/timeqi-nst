@@ -1,12 +1,23 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpException,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+  Res,
+} from '@nestjs/common';
 import { OrganizationService } from './organization.service';
 import { CreateOrganizationDto } from 'src/dto/create-organization.dto';
 import { UpdateOrganizationDto } from 'src/dto/update-organization.dto';
+import { Response } from 'express';
 
 @Controller('organization')
 export class OrganizationController {
-
-  constructor(private readonly organizationService: OrganizationService) { }
+  constructor(private readonly organizationService: OrganizationService) {}
   /**
    * Creates a new organization.
    * @param response - The response object to send the result.
@@ -14,19 +25,25 @@ export class OrganizationController {
    * @returns A JSON response with the status and created organization data.
    */
   @Post()
-  async createOrganization(@Res() response, @Body() createOrganizationDto: CreateOrganizationDto) {
+  async createOrganization(
+    @Body() createOrganizationDto: CreateOrganizationDto,
+  ): Promise<{ message: string; newOrganization: any }> {
     try {
-      const newOrganization = await this.organizationService.createOrganization(createOrganizationDto);
-      return response.status(HttpStatus.CREATED).json({
+      const newOrganization = await this.organizationService.createOrganization(
+        createOrganizationDto,
+      );
+      return {
         message: 'Organization has been created successfully',
         newOrganization,
-      });
-    } catch (err) {
-      return response.status(HttpStatus.BAD_REQUEST).json({
-        statusCode: 400,
-        message: 'Error: Organization not created!',
-        error: 'Bad Request'
-      });
+      };
+    } catch {
+      throw new HttpException(
+        {
+          message: 'Error: Organization not created!',
+          error: 'Bad Request',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
   /**
@@ -37,32 +54,52 @@ export class OrganizationController {
    * @returns A JSON response with the status and updated organization data.
    */
   @Put('/:id')
-  async updateOrganization(@Res() response, @Param('id') organizationId: string,
-    @Body() updateOrganizationDto: UpdateOrganizationDto) {
+  async updateOrganization(
+    @Res() response: Response,
+    @Param('id') organizationId: string,
+    @Body() updateOrganizationDto: UpdateOrganizationDto,
+  ) {
     try {
-      const existingOrganization = await this.organizationService.updateOrganization(organizationId, updateOrganizationDto);
+      const existingOrganization =
+        await this.organizationService.updateOrganization(
+          organizationId,
+          updateOrganizationDto,
+        );
       return response.status(HttpStatus.OK).json({
         message: 'Organization has been successfully updated',
         existingOrganization,
       });
-    } catch (err) {
-      return response.status(err.status).json(err.response);
+    } catch ({ status, response: err }) {
+      return response
+        .status(
+          typeof status === 'number'
+            ? status
+            : HttpStatus.INTERNAL_SERVER_ERROR,
+        )
+        .json(err);
     }
   }
   /**
    * Retrieves all organizations.
-   * @param response - The response object to send the result.
    * @returns A JSON response with the status and all organization data.
    */
   @Get()
-  async getOrganizations(@Res() response) {
+  async getOrganizations(@Res() response: Response) {
     try {
-      const organizationData = await this.organizationService.getAllOrganizations();
+      const organizationData =
+        await this.organizationService.getAllOrganizations();
       return response.status(HttpStatus.OK).json({
-        message: 'All organizations data found successfully', organizationData,
+        message: 'All organizations data found successfully',
+        organizationData,
       });
-    } catch (err) {
-      return response.status(err.status).json(err.response);
+    } catch ({ status, response: err }) {
+      return response
+        .status(
+          typeof status === 'number'
+            ? status
+            : HttpStatus.INTERNAL_SERVER_ERROR,
+        )
+        .json(err);
     }
   }
   /**
@@ -72,14 +109,25 @@ export class OrganizationController {
    * @returns A JSON response with the status and found organization data.
    */
   @Get('/:id')
-  async getOrganization(@Res() response, @Param('id') organizationId: string) {
+  async getOrganization(
+    @Res() response: Response,
+    @Param('id') organizationId: string,
+  ) {
     try {
-      const existingOrganization = await this.organizationService.getOrganization(organizationId);
+      const existingOrganization =
+        await this.organizationService.getOrganization(organizationId);
       return response.status(HttpStatus.OK).json({
-        message: 'Organization found successfully', existingOrganization,
+        message: 'Organization found successfully',
+        existingOrganization,
       });
-    } catch (err) {
-      return response.status(err.status).json(err.response);
+    } catch ({ status, response: err }) {
+      return response
+        .status(
+          typeof status === 'number'
+            ? status
+            : HttpStatus.INTERNAL_SERVER_ERROR,
+        )
+        .json(err);
     }
   }
   /**
@@ -89,15 +137,25 @@ export class OrganizationController {
    * @returns A JSON response with the status and deleted organization data.
    */
   @Delete('/:id')
-  async deleteOrganization(@Res() response, @Param('id') organizationId: string) {
+  async deleteOrganization(
+    @Res() response: Response,
+    @Param('id') organizationId: string,
+  ) {
     try {
-      const deletedOrganization = await this.organizationService.deleteOrganization(organizationId);
+      const deletedOrganization =
+        await this.organizationService.deleteOrganization(organizationId);
       return response.status(HttpStatus.OK).json({
         message: 'Organization deleted successfully',
         deletedOrganization,
       });
-    } catch (err) {
-      return response.status(err.status).json(err.response);
+    } catch ({ status, response: err }) {
+      return response
+        .status(
+          typeof status === 'number'
+            ? status
+            : HttpStatus.INTERNAL_SERVER_ERROR,
+        )
+        .json(err);
     }
   }
 }
