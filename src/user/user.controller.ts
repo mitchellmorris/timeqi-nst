@@ -8,14 +8,19 @@ import {
   Post,
   Put,
   Res,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from 'src/dto/create-user.dto';
 import { UpdateUserDto } from 'src/dto/update-user.dto';
 import { Response } from 'express';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { Logger } from '@nestjs/common';
 
 @Controller('user')
 export class UserController {
+  private readonly logger = new Logger(UserController.name);
   constructor(private readonly userService: UserService) {}
   /**
    * Creates a new user.
@@ -86,6 +91,38 @@ export class UserController {
       return response.status(HttpStatus.OK).json({
         message: 'All users data found successfully',
         userData,
+      });
+    } catch ({ status, response: err }) {
+      return response
+        .status(
+          typeof status === 'number'
+            ? status
+            : HttpStatus.INTERNAL_SERVER_ERROR,
+        )
+        .json(err);
+    }
+  }
+  @UseGuards(AuthGuard)
+  @Get('/profile')
+  async getProfile(
+    @Res() response: Response,
+    @Request()
+    req: {
+      user: { sub: string };
+    },
+  ) {
+    try {
+      // Extend Request type to include 'user'
+      const userId = req.user?.sub;
+      if (!userId) {
+        return response.status(HttpStatus.UNAUTHORIZED).json({
+          message: 'User not authenticated',
+        });
+      }
+      const userProfile = await this.userService.getUser(userId);
+      return response.status(HttpStatus.OK).json({
+        message: 'User profile retrieved successfully',
+        user: userProfile,
       });
     } catch ({ status, response: err }) {
       return response
