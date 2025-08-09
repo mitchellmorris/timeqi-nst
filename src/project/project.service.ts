@@ -75,7 +75,18 @@ export class ProjectService {
    * @returns The project with the specified ID.
    */
   async getProject(projectId: string): Promise<IProject> {
-    const existingProject = await this.projectModel.findById(projectId).exec();
+    const existingProject = await this.projectModel
+      .findById(projectId)
+      .select('-users')
+      .populate({
+        path: 'tasks',
+        select: '_id name',
+        populate: {
+          path: 'assignee',
+          select: '_id name',
+        },
+      })
+      .exec();
     if (!existingProject) {
       throw new NotFoundException(`Project #${projectId} not found`);
     }

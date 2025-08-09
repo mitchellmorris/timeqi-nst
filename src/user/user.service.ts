@@ -65,10 +65,6 @@ export class UserService {
             path: 'sponsor',
             select: '_id name',
           },
-          {
-            path: 'users',
-            select: '_id name',
-          },
         ],
       })
       .exec();

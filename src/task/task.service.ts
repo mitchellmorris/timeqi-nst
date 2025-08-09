@@ -71,7 +71,17 @@ export class TaskService {
    * @returns The task with the specified ID.
    */
   async getTask(taskId: string): Promise<ITask> {
-    const existingTask = await this.taskModel.findById(taskId).exec();
+    const existingTask = await this.taskModel
+      .findById(taskId)
+      .populate({
+        path: 'entries',
+        select: '_id name',
+        populate: {
+          path: 'performer',
+          select: '_id name',
+        },
+      })
+      .exec();
     if (!existingTask) {
       throw new NotFoundException(`Task #${taskId} not found`);
     }

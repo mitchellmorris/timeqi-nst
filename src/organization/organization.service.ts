@@ -70,6 +70,17 @@ export class OrganizationService {
   async getOrganization(organizationId: string): Promise<IOrganization> {
     const existingOrganization = await this.organizationModel
       .findById(organizationId)
+      .select('-users')
+      .populate({
+        path: 'projects',
+        select: '_id name',
+        populate: [
+          {
+            path: 'sponsor',
+            select: '_id name',
+          },
+        ],
+      })
       .exec();
     if (!existingOrganization) {
       throw new NotFoundException(`Organization #${organizationId} not found`);
