@@ -3,6 +3,7 @@ import { HydratedDocument, Types } from 'mongoose';
 import { Organization } from './organization.schema';
 import { Project } from './project.schema';
 import { Task } from './task.schema';
+import { TimeOff } from './time-off.schema';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -22,6 +23,9 @@ export class User {
 
   @Prop({ type: [{ type: Types.ObjectId, ref: 'Task' }] }) // Array of ObjectIds referencing Task
   tasks: Task[]; // Array of Task documents
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'TimeOff' }] }) // Array of ObjectIds referencing TimeOff
+  timeOff: TimeOff[]; // Array of TimeOff documents
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

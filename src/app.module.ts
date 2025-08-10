@@ -18,6 +18,9 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { UserSchema } from './schemas/user.schema';
+import { TimeOffController } from './time-off/time-off.controller';
+import { TimeOffService } from './time-off/time-off.service';
+import { TimeOffSchema } from './schemas/time-off.schema';
 
 @Module({
   imports: [
@@ -29,6 +32,7 @@ import { UserSchema } from './schemas/user.schema';
     MongooseModule.forFeature([{ name: 'Project', schema: ProjectSchema }]),
     MongooseModule.forFeature([{ name: 'Task', schema: TaskSchema }]),
     MongooseModule.forFeature([{ name: 'Entry', schema: EntrySchema }]),
+    MongooseModule.forFeature([{ name: 'TimeOff', schema: TimeOffSchema }]),
     AuthModule,
     UserModule,
     ConfigModule.forRoot({
@@ -41,6 +45,7 @@ import { UserSchema } from './schemas/user.schema';
     ProjectController,
     TaskController,
     EntryController,
+    TimeOffController,
   ],
   providers: [
     AppService,
@@ -48,6 +53,7 @@ import { UserSchema } from './schemas/user.schema';
     ProjectService,
     TaskService,
     EntryService,
+    TimeOffService,
   ],
 })
 export class AppModule {}

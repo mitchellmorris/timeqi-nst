@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import { Project } from './project.schema';
 import { User } from './user.schema';
+import { TimeOff } from './time-off.schema';
 
 export type OrganizationDocument = HydratedDocument<Organization>;
 
@@ -18,6 +19,9 @@ export class Organization {
 
   @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }] }) // Array of ObjectIds referencing User
   users: User[]; // Array of User documents
+  
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'TimeOff' }] }) // Array of ObjectIds referencing TimeOff
+  timeOff: TimeOff[]; // Array of TimeOff documents
 }
 
 export const OrganizationSchema = SchemaFactory.createForClass(Organization);
