@@ -1,12 +1,23 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpException,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+  Res,
+} from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { CreateProjectDto } from 'src/dto/create-project.dto';
 import { UpdateProjectDto } from 'src/dto/update-project.dto';
+import { Response } from 'express';
 
 @Controller('project')
 export class ProjectController {
-
-  constructor(private readonly projectService: ProjectService) { }
+  constructor(private readonly projectService: ProjectService) {}
   /**
    * Creates a new project.
    * @param response - The response object to send the result.
@@ -14,19 +25,22 @@ export class ProjectController {
    * @returns A JSON response with the status and created project data.
    */
   @Post()
-  async createProject(@Res() response, @Body() createProjectDto: CreateProjectDto) {
+  async createProject(@Body() createProjectDto: CreateProjectDto) {
     try {
-      const newProject = await this.projectService.createProject(createProjectDto);
-      return response.status(HttpStatus.CREATED).json({
+      const newProject =
+        await this.projectService.createProject(createProjectDto);
+      return {
         message: 'Project has been created successfully',
         newProject,
-      });
-    } catch (err) {
-      return response.status(HttpStatus.BAD_REQUEST).json({
-        statusCode: 400,
-        message: 'Error: Project not created!',
-        error: 'Bad Request'
-      });
+      };
+    } catch {
+      throw new HttpException(
+        {
+          message: 'Error: Project not created!',
+          error: 'Bad Request',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
   /**
@@ -37,16 +51,28 @@ export class ProjectController {
    * @returns A JSON response with the status and updated project data.
    */
   @Put('/:id')
-  async updateProject(@Res() response, @Param('id') projectId: string,
-    @Body() updateProjectDto: UpdateProjectDto) {
+  async updateProject(
+    @Res() response: Response,
+    @Param('id') projectId: string,
+    @Body() updateProjectDto: UpdateProjectDto,
+  ) {
     try {
-      const existingProject = await this.projectService.updateProject(projectId, updateProjectDto);
+      const existingProject = await this.projectService.updateProject(
+        projectId,
+        updateProjectDto,
+      );
       return response.status(HttpStatus.OK).json({
         message: 'Project has been successfully updated',
         existingProject,
       });
-    } catch (err) {
-      return response.status(err.status).json(err.response);
+    } catch ({ status, response: err }) {
+      return response
+        .status(
+          typeof status === 'number'
+            ? status
+            : HttpStatus.INTERNAL_SERVER_ERROR,
+        )
+        .json(err);
     }
   }
   /**
@@ -55,14 +81,21 @@ export class ProjectController {
    * @returns A JSON response with the status and all project data.
    */
   @Get()
-  async getProjects(@Res() response) {
+  async getProjects(@Res() response: Response) {
     try {
       const projectData = await this.projectService.getAllProjects();
       return response.status(HttpStatus.OK).json({
-        message: 'All projects data found successfully', projectData,
+        message: 'All projects data found successfully',
+        projectData,
       });
-    } catch (err) {
-      return response.status(err.status).json(err.response);
+    } catch ({ status, response: err }) {
+      return response
+        .status(
+          typeof status === 'number'
+            ? status
+            : HttpStatus.INTERNAL_SERVER_ERROR,
+        )
+        .json(err);
     }
   }
   /**
@@ -72,14 +105,21 @@ export class ProjectController {
    * @returns A JSON response with the status and found project data.
    */
   @Get('/:id')
-  async getProject(@Res() response, @Param('id') projectId: string) {
+  async getProject(@Res() response: Response, @Param('id') projectId: string) {
     try {
       const existingProject = await this.projectService.getProject(projectId);
       return response.status(HttpStatus.OK).json({
-        message: 'Project found successfully', existingProject,
+        message: 'Project found successfully',
+        existingProject,
       });
-    } catch (err) {
-      return response.status(err.status).json(err.response);
+    } catch ({ status, response: err }) {
+      return response
+        .status(
+          typeof status === 'number'
+            ? status
+            : HttpStatus.INTERNAL_SERVER_ERROR,
+        )
+        .json(err);
     }
   }
   /**
@@ -89,15 +129,24 @@ export class ProjectController {
    * @returns A JSON response with the status and deleted project data.
    */
   @Delete('/:id')
-  async deleteProject(@Res() response, @Param('id') projectId: string) {
+  async deleteProject(
+    @Res() response: Response,
+    @Param('id') projectId: string,
+  ) {
     try {
       const deletedProject = await this.projectService.deleteProject(projectId);
       return response.status(HttpStatus.OK).json({
         message: 'Project deleted successfully',
         deletedProject,
       });
-    } catch (err) {
-      return response.status(err.status).json(err.response);
+    } catch ({ status, response: err }) {
+      return response
+        .status(
+          typeof status === 'number'
+            ? status
+            : HttpStatus.INTERNAL_SERVER_ERROR,
+        )
+        .json(err);
     }
   }
 }
