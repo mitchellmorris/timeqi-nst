@@ -74,12 +74,14 @@ export class OrganizationService {
       .populate({
         path: 'projects',
         select: '_id name',
-        populate: [
-          {
-            path: 'sponsor',
-            select: '_id name',
-          },
-        ],
+        populate: {
+          path: 'sponsor',
+          select: '_id name',
+        },
+      })
+      .populate({
+        path: 'timeOff',
+        select: '_id name',
       })
       .exec();
     if (!existingOrganization) {

@@ -19,7 +19,7 @@ export class Organization {
 
   @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }] }) // Array of ObjectIds referencing User
   users: User[]; // Array of User documents
-  
+
   @Prop({ type: [{ type: Types.ObjectId, ref: 'TimeOff' }] }) // Array of ObjectIds referencing TimeOff
   timeOff: TimeOff[]; // Array of TimeOff documents
 }

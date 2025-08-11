@@ -86,6 +86,10 @@ export class ProjectService {
           select: '_id name',
         },
       })
+      .populate({
+        path: 'timeOff',
+        select: '_id name',
+      })
       .exec();
     if (!existingProject) {
       throw new NotFoundException(`Project #${projectId} not found`);
