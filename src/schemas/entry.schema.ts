@@ -9,8 +9,20 @@ export type EntryDocument = HydratedDocument<Entry>;
 
 @Schema()
 export class Entry {
-  @Prop()
+  @Prop({ type: String, required: true })
   name: string;
+
+  @Prop({ type: String, required: true })
+  description: string;
+
+  @Prop({ type: Date, required: true })
+  date: Date;
+
+  @Prop({ type: Date, required: true })
+  createdAt: Date;
+
+  @Prop({ type: Date })
+  updatedAt: Date;
 
   @Prop({ type: Types.ObjectId, ref: 'User' }) // ObjectId referencing User
   performer: User; // User document

@@ -8,8 +8,14 @@ export type OrganizationDocument = HydratedDocument<Organization>;
 
 @Schema()
 export class Organization {
-  @Prop()
+  @Prop({ type: String, required: true })
   name: string;
+
+  @Prop({ type: Number })
+  hours: number;
+
+  @Prop({ type: [String] })
+  weekdays: string[];
 
   @Prop({ type: Types.ObjectId, ref: 'User' }) // ObjectId referencing User
   sponsor: User; // User document

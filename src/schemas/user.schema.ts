@@ -9,10 +9,10 @@ export type UserDocument = HydratedDocument<User>;
 
 @Schema()
 export class User {
-  @Prop()
+  @Prop({ type: String, required: true, unique: true })
   email: string;
 
-  @Prop()
+  @Prop({ type: String, required: true })
   password: string;
 
   @Prop({ type: [{ type: Types.ObjectId, ref: 'Organization' }] }) // Array of ObjectIds referencing Post

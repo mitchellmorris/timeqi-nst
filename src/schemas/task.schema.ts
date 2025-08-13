@@ -9,8 +9,17 @@ export type TaskDocument = HydratedDocument<Task>;
 
 @Schema()
 export class Task {
-  @Prop()
+  @Prop({ type: String })
   name: string;
+
+  @Prop({ type: Number })
+  pitch: number;
+
+  @Prop({ type: Number })
+  estimate: number;
+
+  @Prop({ type: Date })
+  updatedAt: Date;
 
   @Prop({ type: Types.ObjectId, ref: 'User' }) // ObjectId referencing User
   assignee: User; // User document

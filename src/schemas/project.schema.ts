@@ -9,8 +9,26 @@ export type ProjectDocument = HydratedDocument<Project>;
 
 @Schema()
 export class Project {
-  @Prop()
+  @Prop({ type: String, required: true })
   name: string;
+
+  @Prop({ type: String })
+  startDate: string;
+
+  @Prop({ type: Number })
+  pitch: number;
+
+  @Prop({ type: Number })
+  fulfillment: number;
+
+  @Prop({ type: Number })
+  accuracy: number;
+
+  @Prop({ type: Number })
+  estimate: number;
+
+  @Prop({ type: Date })
+  updatedAt: Date;
 
   @Prop({ type: Types.ObjectId, ref: 'User' }) // ObjectId referencing User
   sponsor: User; // User document
