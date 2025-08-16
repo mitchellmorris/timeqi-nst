@@ -21,6 +21,9 @@ import { UserSchema } from './schemas/user.schema';
 import { TimeOffController } from './time-off/time-off.controller';
 import { TimeOffService } from './time-off/time-off.service';
 import { TimeOffSchema } from './schemas/time-off.schema';
+import { ProjectUserController } from './project-user/project-user.controller';
+import { ProjectUserService } from './project-user/project-user.service';
+import { ProjectUserSchema } from './schemas/project.user.schema';
 
 @Module({
   imports: [
@@ -33,6 +36,9 @@ import { TimeOffSchema } from './schemas/time-off.schema';
     MongooseModule.forFeature([{ name: 'Task', schema: TaskSchema }]),
     MongooseModule.forFeature([{ name: 'Entry', schema: EntrySchema }]),
     MongooseModule.forFeature([{ name: 'TimeOff', schema: TimeOffSchema }]),
+    MongooseModule.forFeature([
+      { name: 'ProjectUser', schema: ProjectUserSchema },
+    ]),
     AuthModule,
     UserModule,
     ConfigModule.forRoot({
@@ -46,6 +52,7 @@ import { TimeOffSchema } from './schemas/time-off.schema';
     TaskController,
     EntryController,
     TimeOffController,
+    ProjectUserController,
   ],
   providers: [
     AppService,
@@ -54,6 +61,7 @@ import { TimeOffSchema } from './schemas/time-off.schema';
     TaskService,
     EntryService,
     TimeOffService,
+    ProjectUserService,
   ],
 })
 export class AppModule {}

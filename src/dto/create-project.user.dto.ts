@@ -4,17 +4,26 @@ import { IsObjectId } from 'nestjs-object-id';
 
 export class CreateProjectUserDto {
   @IsNumber()
-  readonly pitch: number;
+  readonly pitch: number = 1;
 
   @IsNumber()
-  readonly fulfillment: number;
+  readonly fulfillment: number = 1;
 
   @IsNumber()
-  readonly accuracy: number;
+  readonly accuracy: number = 1;
+
+  @IsNumber()
+  readonly estimate: number = 0;
+
+  @IsNumber()
+  readonly hours: number = 0;
+
+  @IsNumber()
+  readonly expectation: number = 0;
 
   @Min(1)
   @Max(24)
-  readonly hours: number;
+  readonly workshift: number;
 
   @IsArray()
   @IsIn(

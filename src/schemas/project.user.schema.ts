@@ -5,7 +5,7 @@ import { User } from './user.schema';
 
 export type ProjectUserDocument = HydratedDocument<ProjectUser>;
 
-@Schema()
+@Schema({ collection: 'project.users' })
 export class ProjectUser {
   @Prop()
   pitch: number;
