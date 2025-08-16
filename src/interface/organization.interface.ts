@@ -1,12 +1,10 @@
-import { Document } from 'mongoose';
-export interface IOrganization extends Document {
-  readonly name: string;
-  readonly hours: number;
-  readonly weekdays: string[];
-  readonly sponsor: string; // ObjectId referencing User
-  readonly projects: string[]; // Array of ObjectIds referencing Project
-  readonly users: string[]; // Array of ObjectIds referencing User
-  readonly timeOff: string[]; // Array of ObjectIds referencing TimeOff
-  // Note: The properties 'projects', 'users', and 'timeOff' are arrays
-  // of ObjectIds referencing their respective documents.
-}
+import { Document, Types } from 'mongoose';
+import { IOrganization as Organization } from '@betavc/timeqi-sh';
+
+export type IOrganization = Organization &
+  Document & {
+    readonly sponsor: Types.ObjectId | null;
+    readonly users: Types.ObjectId[];
+    readonly timeOff: Types.ObjectId[];
+    readonly projects: Types.ObjectId[];
+  };

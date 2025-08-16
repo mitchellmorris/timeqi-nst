@@ -1,12 +1,10 @@
-import { Document } from 'mongoose';
-export interface IEntry extends Document {
-  readonly name: string;
-  readonly description: string;
-  readonly date: Date;
-  readonly createdAt: Date;
-  readonly updatedAt?: Date;
-  readonly performer: string; // ObjectId referencing User
-  readonly project: string; // ObjectId referencing Project
-  readonly organization: string; // ObjectId referencing Organization
-  readonly task: string;
-}
+import { Document, Types } from 'mongoose';
+import { IEntry as Entry } from '@betavc/timeqi-sh';
+
+export type IEntry = Entry &
+  Document & {
+    readonly organization: Types.ObjectId;
+    readonly project: Types.ObjectId;
+    readonly performer: Types.ObjectId;
+    readonly task: Types.ObjectId;
+  };
