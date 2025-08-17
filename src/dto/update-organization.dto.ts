@@ -7,7 +7,7 @@ export class UpdateOrganizationDto extends PartialType(CreateOrganizationDto) {
 
   @Min(1)
   @Max(24)
-  readonly hours: number;
+  readonly workshift: number;
 
   @IsArray()
   @IsIn(

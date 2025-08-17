@@ -12,7 +12,7 @@ export class Organization {
   name: string;
 
   @Prop({ type: Number })
-  hours: number;
+  workshift: number;
 
   @Prop({ type: [String] })
   weekdays: string[];
