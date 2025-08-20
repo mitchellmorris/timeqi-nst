@@ -1,6 +1,15 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateProjectDto } from './create-project.dto';
-import { IsISO8601, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsIn,
+  IsISO8601,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  Max,
+  Min,
+} from 'class-validator';
 export class UpdateProjectDto extends PartialType(CreateProjectDto) {
   @IsString()
   readonly name: string;
@@ -20,4 +29,23 @@ export class UpdateProjectDto extends PartialType(CreateProjectDto) {
   @IsISO8601()
   @IsNotEmpty()
   readonly updatedAt: string;
+
+  @Min(1)
+  @Max(24)
+  readonly workshift: number;
+
+  @IsArray()
+  @IsIn(
+    [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+    ],
+    { each: true },
+  )
+  readonly weekdays: string[];
 }

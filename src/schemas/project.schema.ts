@@ -12,6 +12,12 @@ export class Project {
   @Prop({ type: String, required: true })
   name: string;
 
+  @Prop({ type: Number })
+  workshift: number;
+
+  @Prop({ type: [String] })
+  weekdays: string[];
+
   @Prop({ type: String })
   startDate: string;
 
