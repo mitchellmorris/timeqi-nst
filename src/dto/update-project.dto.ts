@@ -10,6 +10,8 @@ import {
   Max,
   Min,
 } from 'class-validator';
+import { WEEKDAYS as RAW_WEEKDAYS } from '@betavc/timeqi-sh';
+const WEEKDAYS: readonly string[] = RAW_WEEKDAYS as readonly string[];
 export class UpdateProjectDto extends PartialType(CreateProjectDto) {
   @IsString()
   readonly name: string;
@@ -35,17 +37,6 @@ export class UpdateProjectDto extends PartialType(CreateProjectDto) {
   readonly workshift: number;
 
   @IsArray()
-  @IsIn(
-    [
-      'Sunday',
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-    ],
-    { each: true },
-  )
+  @IsIn(WEEKDAYS, { each: true })
   readonly weekdays: string[];
 }
