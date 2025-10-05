@@ -1,55 +1,65 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
-import { Task } from './task.schema';
 import { User } from './user.schema';
 import { Organization } from './organization.schema';
-import { TimeOff } from './time-off.schema';
+import { Scheduling } from './scheduling.schema';
+import { Scenario } from './scenario.schema';
+import { SchemaMixin } from './schema-mixin';
 
 export type ProjectDocument = HydratedDocument<Project>;
 
+const BaseSchema = SchemaMixin([Scheduling, Scenario]);
+
 @Schema()
-export class Project {
+export class Project extends BaseSchema {
   @Prop({ type: String, required: true })
   name: string;
 
-  @Prop({ type: Number })
-  workshift: number;
-
-  @Prop({ type: [String] })
-  weekdays: string[];
-
-  @Prop({ type: String })
-  startDate: string;
-
-  @Prop({ type: Number })
-  pitch: number;
-
-  @Prop({ type: Number })
-  fulfillment: number;
-
-  @Prop({ type: Number })
-  accuracy: number;
-
-  @Prop({ type: Number })
-  estimate: number;
+  @Prop({ type: Date, required: true, default: Date.now })
+  createdAt: Date;
 
   @Prop({ type: Date })
   updatedAt: Date;
 
-  @Prop({ type: Types.ObjectId, ref: 'User' }) // ObjectId referencing User
-  sponsor: User; // User document
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
+  sponsor: Types.ObjectId | User;
 
-  @Prop({ type: Types.ObjectId, ref: 'Organization' }) // ObjectId referencing Organization
-  organization: Organization; // Organization document
+  @Prop({ type: Types.ObjectId, ref: 'Organization', required: true })
+  organization: Types.ObjectId | Organization;
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'Task' }] }) // Array of ObjectIds referencing Task
-  tasks: Task[]; // Array of Task documents
-
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }] }) // Array of ObjectIds referencing User
-  users: User[]; // Array of User documents
-
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'TimeOff' }] }) // Array of ObjectIds referencing TimeOff
-  timeOff: TimeOff[]; // Array of TimeOff documents
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }] })
+  users: Types.ObjectId[] | User[];
 }
 
 export const ProjectSchema = SchemaFactory.createForClass(Project);
+// Middleware to update the updatedAt field on save and update
+ProjectSchema.pre('save', function (next) {
+  this.updatedAt = new Date();
+  next();
+});
+
+ProjectSchema.pre('findOneAndUpdate', function (next) {
+  this.set({ updatedAt: new Date() });
+  next();
+});
+
+ProjectSchema.set('toObject', { virtuals: true });
+ProjectSchema.set('toJSON', { virtuals: true });
+
+ProjectSchema.virtual('entries', {
+  ref: 'Entry',
+  localField: '_id',
+  foreignField: 'project',
+});
+
+ProjectSchema.virtual('timeOff', {
+  ref: 'TimeOff',
+  localField: '_id',
+  foreignField: 'target',
+});
+
+ProjectSchema.virtual('tasks', {
+  ref: 'Task',
+  localField: '_id',
+  foreignField: 'project',
+});

@@ -3,14 +3,10 @@ import { Types } from 'mongoose';
 import { IsObjectId } from 'nestjs-object-id';
 import { SchedulingDto } from './create-scheduling.dto';
 
-export class CreateProjectUserDto extends SchedulingDto {
+export class CreateOrganizationUserDto extends SchedulingDto {
   @IsObjectId()
   @IsNotEmpty()
   organization: Types.ObjectId;
-
-  @IsObjectId()
-  @IsNotEmpty()
-  project: Types.ObjectId;
 
   @IsObjectId()
   @IsNotEmpty()

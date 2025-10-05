@@ -1,11 +1,18 @@
-import { IsISO8601, IsNotEmpty, IsString } from 'class-validator';
+import { IsISO8601, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { Types } from 'mongoose';
 import { IsObjectId } from 'nestjs-object-id';
+import { CreateScenarioDto } from './create-scenario.dto';
+import { PickType } from '@nestjs/mapped-types';
 
-export class CreateEntryDto {
+export class CreateEntryDto extends PickType(CreateScenarioDto, [
+  'forecast',
+] as const) {
   @IsString()
   @IsNotEmpty()
   readonly name: string;
+
+  @IsNumber()
+  readonly hours: number;
 
   @IsString()
   @IsNotEmpty()
@@ -13,25 +20,21 @@ export class CreateEntryDto {
 
   @IsISO8601()
   @IsNotEmpty()
-  readonly date: string;
+  readonly date: Date;
 
-  @IsISO8601()
+  @IsObjectId()
   @IsNotEmpty()
-  readonly createdAt: string;
+  performer: Types.ObjectId;
 
-  @IsObjectId() // Validates if the string is a valid MongoDB ObjectId
+  @IsObjectId()
   @IsNotEmpty()
-  performer: Types.ObjectId; // Type it as Mongoose's ObjectId
+  organization: Types.ObjectId;
 
-  @IsObjectId() // Validates if the string is a valid MongoDB ObjectId
+  @IsObjectId()
   @IsNotEmpty()
-  organization: Types.ObjectId; // Type it as Mongoose's ObjectId
+  project: Types.ObjectId;
 
-  @IsObjectId() // Validates if the string is a valid MongoDB ObjectId
+  @IsObjectId()
   @IsNotEmpty()
-  project: Types.ObjectId; // Type it as Mongoose's ObjectId
-
-  @IsObjectId() // Validates if the string is a valid MongoDB ObjectId
-  @IsNotEmpty()
-  task: Types.ObjectId; // Type it as Mongoose's ObjectId
+  task: Types.ObjectId;
 }

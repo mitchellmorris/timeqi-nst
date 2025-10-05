@@ -1,31 +1,37 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import { Organization } from './organization.schema';
-import { Project } from './project.schema';
-import { Task } from './task.schema';
-import { TimeOff } from './time-off.schema';
 
 export type UserDocument = HydratedDocument<User>;
 
 @Schema()
 export class User {
+  @Prop({ type: String, required: true })
+  name: string;
+
   @Prop({ type: String, required: true, unique: true })
   email: string;
 
   @Prop({ type: String, required: true })
   password: string;
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'Organization' }] }) // Array of ObjectIds referencing Post
-  organizations: Organization[]; // Array of Post documents
-
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'Project' }] }) // Array of ObjectIds referencing Project
-  projects: Project[]; // Array of Project documents
-
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'Task' }] }) // Array of ObjectIds referencing Task
-  tasks: Task[]; // Array of Task documents
-
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'TimeOff' }] }) // Array of ObjectIds referencing TimeOff
-  timeOff: TimeOff[]; // Array of TimeOff documents
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Organization' }] })
+  organizations: Types.ObjectId[] | Organization[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+
+UserSchema.set('toObject', { virtuals: true });
+UserSchema.set('toJSON', { virtuals: true });
+
+UserSchema.virtual('projects', {
+  ref: 'Project',
+  localField: '_id',
+  foreignField: 'users',
+});
+
+UserSchema.virtual('tasks', {
+  ref: 'Task',
+  localField: '_id',
+  foreignField: 'assignee',
+});

@@ -1,9 +1,8 @@
 import { IsNotEmpty } from 'class-validator';
 import { Types } from 'mongoose';
 import { IsObjectId } from 'nestjs-object-id';
-import { SchedulingDto } from './create-scheduling.dto';
 
-export class CreateProjectUserDto extends SchedulingDto {
+export class CreateTaskUserDto {
   @IsObjectId()
   @IsNotEmpty()
   organization: Types.ObjectId;
@@ -11,6 +10,10 @@ export class CreateProjectUserDto extends SchedulingDto {
   @IsObjectId()
   @IsNotEmpty()
   project: Types.ObjectId;
+
+  @IsObjectId()
+  @IsNotEmpty()
+  task: Types.ObjectId;
 
   @IsObjectId()
   @IsNotEmpty()

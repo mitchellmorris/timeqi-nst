@@ -1,18 +1,26 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
-import { Project } from './project.schema';
 import { User } from './user.schema';
-import { Scenario } from './scenario.schema';
+import { Task } from './task.schema';
 import { SchemaMixin } from './schema-mixin';
+import { Scenario } from './scenario.schema';
+import { Project } from '@betavc/timeqi-sh';
 
 const BaseSchema = SchemaMixin([Scenario], {
-  excludeFields: ['startDate'],
+  excludeFields: [
+    'startDate',
+    'estimate',
+    'forecast',
+    'projection',
+    'targetDate',
+    'endDate',
+  ],
 });
 
-export type ProjectUserDocument = HydratedDocument<ProjectUser>;
+export type TaskUserDocument = HydratedDocument<TaskUser>;
 
-@Schema({ collection: 'project.users' })
-export class ProjectUser extends BaseSchema {
+@Schema({ collection: 'task.users' })
+export class TaskUser extends BaseSchema {
   @Prop({ type: Date, required: true, default: Date.now })
   createdAt: Date;
 
@@ -22,18 +30,21 @@ export class ProjectUser extends BaseSchema {
   @Prop({ type: Types.ObjectId, ref: 'Project', required: true })
   project: Types.ObjectId | Project;
 
+  @Prop({ type: Types.ObjectId, ref: 'Task', required: true })
+  task: Types.ObjectId | Task;
+
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   user: Types.ObjectId | User;
 }
 
-export const ProjectUserSchema = SchemaFactory.createForClass(ProjectUser);
+export const TaskUserSchema = SchemaFactory.createForClass(TaskUser);
 // Middleware to update the updatedAt field on save and update
-ProjectUserSchema.pre('save', function (next) {
+TaskUserSchema.pre('save', function (next) {
   this.updatedAt = new Date();
   next();
 });
 
-ProjectUserSchema.pre('findOneAndUpdate', function (next) {
+TaskUserSchema.pre('findOneAndUpdate', function (next) {
   this.set({ updatedAt: new Date() });
   next();
 });

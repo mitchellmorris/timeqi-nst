@@ -1,34 +1,25 @@
-import { IsISO8601, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IntersectionType, OmitType } from '@nestjs/mapped-types';
+import { IsNotEmpty, IsString } from 'class-validator';
 import { Types } from 'mongoose';
 import { IsObjectId } from 'nestjs-object-id';
+import { SchedulingDto } from './create-scheduling.dto';
+import { CreateScenarioDto } from './create-scenario.dto';
 /**
  * Not including tasks, users, and timeOff as they are not required for project creation.
  */
-export class CreateProjectDto {
+export class CreateProjectDto extends IntersectionType(
+  SchedulingDto,
+  OmitType(CreateScenarioDto, ['forecast'] as const),
+) {
   @IsString()
   @IsNotEmpty()
   readonly name: string;
 
-  @IsISO8601()
-  readonly startDate: string;
-
-  @IsNumber()
-  readonly pitch: number;
-
-  @IsNumber()
-  readonly fulfillment: number;
-
-  @IsNumber()
-  readonly accuracy: number;
-
-  @IsNumber()
-  readonly estimate: number;
-
-  @IsObjectId() // Validates if the string is a valid MongoDB ObjectId
+  @IsObjectId()
   @IsNotEmpty()
-  sponsor: Types.ObjectId; // Type it as Mongoose's ObjectId
+  organization: Types.ObjectId;
 
-  @IsObjectId() // Validates if the string is a valid MongoDB ObjectId
+  @IsObjectId()
   @IsNotEmpty()
-  organization: Types.ObjectId; // Type it as Mongoose's ObjectId
+  sponsor: Types.ObjectId;
 }

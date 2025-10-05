@@ -18,11 +18,11 @@ export class CreateTimeOffDto {
   @IsNumber()
   readonly extendedHours: number;
 
-  @IsObjectId() // Validates if the string is a valid MongoDB ObjectId
+  @IsObjectId()
   @IsNotEmpty()
-  target: Types.ObjectId; // Type it as Mongoose's ObjectId
+  target: Types.ObjectId;
 
   @IsString()
   @IsNotEmpty()
-  readonly type: ITimeOff['type']; // The model name (used for population)
+  readonly type: ITimeOff['type'];
 }
