@@ -1,10 +1,11 @@
 import { Document, Types } from 'mongoose';
-import { IEntry as Entry } from '@betavc/timeqi-sh';
+import { ITask as Task } from '@betavc/timeqi-sh';
 
-export type IEntry = Entry &
+export type ITask = Task &
   Document & {
+    readonly user?: Types.ObjectId;
     readonly organization?: Types.ObjectId;
     readonly project?: Types.ObjectId;
-    readonly performer?: Types.ObjectId;
     readonly task?: Types.ObjectId;
+    readonly entries?: Types.ObjectId[];
   };

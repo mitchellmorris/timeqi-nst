@@ -3,5 +3,6 @@ import { ITimeOff as TimeOff } from '@betavc/timeqi-sh';
 
 export type ITimeOff = TimeOff &
   Document & {
-    readonly target: Types.ObjectId;
+    readonly target?: Types.ObjectId;
+    readonly users?: Types.ObjectId[];
   };
