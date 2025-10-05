@@ -27,29 +27,6 @@ export class TimeOffService {
    */
   async createTimeOff(createTimeOffDto: CreateTimeOffDto): Promise<ITimeOff> {
     const newTimeOff = new this.timeOffModel(createTimeOffDto);
-    switch (createTimeOffDto.type) {
-      case 'User':
-        // Add time off to the user's time offs array
-        await this.userModel.findByIdAndUpdate(createTimeOffDto.target, {
-          $addToSet: { timeOff: newTimeOff._id },
-        });
-        break;
-      case 'Organization':
-        // Add time off to the organization's time offs array
-        await this.organizationModel.findByIdAndUpdate(
-          createTimeOffDto.target,
-          {
-            $addToSet: { timeOff: newTimeOff._id },
-          },
-        );
-        break;
-      case 'Project':
-        // Add time off to the project's time offs array
-        await this.projectModel.findByIdAndUpdate(createTimeOffDto.target, {
-          $addToSet: { timeOff: newTimeOff._id },
-        });
-        break;
-    }
     return newTimeOff.save();
   }
   /**
@@ -66,62 +43,6 @@ export class TimeOffService {
     const currentTimeOff = await this.timeOffModel.findById(timeOffId);
     if (!currentTimeOff) {
       throw new NotFoundException(`TimeOff #${timeOffId} not found`);
-    }
-
-    // Check if type or target changed
-    const typeChanged =
-      updateTimeOffDto.type &&
-      updateTimeOffDto.type !== currentTimeOff.get('type');
-    const targetChanged =
-      updateTimeOffDto.target &&
-      updateTimeOffDto.target !== currentTimeOff.get('target');
-
-    if (typeChanged || targetChanged) {
-      // Remove from old type set
-      switch (currentTimeOff.get('type')) {
-        case 'User':
-          await this.userModel.findByIdAndUpdate(currentTimeOff.get('target'), {
-            $pull: { timeOff: currentTimeOff._id },
-          });
-          break;
-        case 'Organization':
-          await this.organizationModel.findByIdAndUpdate(
-            currentTimeOff.get('target'),
-            {
-              $pull: { timeOff: currentTimeOff._id },
-            },
-          );
-          break;
-        case 'Project':
-          await this.projectModel.findByIdAndUpdate(
-            currentTimeOff.get('target'),
-            {
-              $pull: { timeOff: currentTimeOff._id },
-            },
-          );
-          break;
-      }
-      // Add to new type set
-      const newType: ITimeOff['type'] =
-        updateTimeOffDto.type || currentTimeOff.get('type');
-      const newTarget = updateTimeOffDto.target || currentTimeOff.get('target');
-      switch (newType) {
-        case 'User':
-          await this.userModel.findByIdAndUpdate(newTarget, {
-            $addToSet: { timeOff: currentTimeOff._id },
-          });
-          break;
-        case 'Organization':
-          await this.organizationModel.findByIdAndUpdate(newTarget, {
-            $addToSet: { timeOff: currentTimeOff._id },
-          });
-          break;
-        case 'Project':
-          await this.projectModel.findByIdAndUpdate(newTarget, {
-            $addToSet: { timeOff: currentTimeOff._id },
-          });
-          break;
-      }
     }
 
     // Update the time off document
@@ -208,32 +129,6 @@ export class TimeOffService {
     if (!deletedTimeOff) {
       throw new NotFoundException(`TimeOff #${timeOffId} not found`);
     }
-
-    // Remove time off from the corresponding type's set
-    switch (deletedTimeOff.get('type')) {
-      case 'User':
-        await this.userModel.findByIdAndUpdate(deletedTimeOff.get('target'), {
-          $pull: { timeOff: timeOffId },
-        });
-        break;
-      case 'Organization':
-        await this.organizationModel.findByIdAndUpdate(
-          deletedTimeOff.get('target'),
-          {
-            $pull: { timeOff: timeOffId },
-          },
-        );
-        break;
-      case 'Project':
-        await this.projectModel.findByIdAndUpdate(
-          deletedTimeOff.get('target'),
-          {
-            $pull: { timeOff: timeOffId },
-          },
-        );
-        break;
-    }
-
     return deletedTimeOff;
   }
 }

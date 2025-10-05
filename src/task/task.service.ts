@@ -24,14 +24,6 @@ export class TaskService {
       ...createTaskDto,
       users: [createTaskDto.assignee], // initialize users array with assignee
     });
-    // Add task to the user's tasks array
-    await this.userModel.findByIdAndUpdate(createTaskDto.assignee, {
-      $addToSet: { tasks: newTask._id },
-    });
-    // Add task to the project's tasks array
-    await this.projectModel.findByIdAndUpdate(createTaskDto.project, {
-      $addToSet: { tasks: newTask._id },
-    });
     return newTask.save();
   }
   /**
@@ -97,17 +89,6 @@ export class TaskService {
     if (!deletedTask) {
       throw new NotFoundException(`Task #${taskId} not found`);
     }
-    // Remove task from all users' tasks arrays
-    if (deletedTask.users && Array.isArray(deletedTask.users)) {
-      await this.userModel.updateMany(
-        { _id: { $in: deletedTask.users } },
-        { $pull: { tasks: deletedTask._id } },
-      );
-    }
-    // Remove task from the project's tasks array
-    await this.projectModel.findByIdAndUpdate(deletedTask.project, {
-      $pull: { tasks: deletedTask._id },
-    });
     return deletedTask;
   }
 }

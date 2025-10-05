@@ -25,10 +25,6 @@ export class ProjectService {
       ...createProjectDto,
       users: [createProjectDto.sponsor], // initialize users array with sponsor
     });
-    // Add project to the user's projects array
-    await this.userModel.findByIdAndUpdate(createProjectDto.sponsor, {
-      $addToSet: { projects: newProject._id },
-    });
     // Add project to the organization's projects array
     await this.organizationModel.findByIdAndUpdate(
       createProjectDto.organization,
@@ -106,10 +102,6 @@ export class ProjectService {
     if (!deletedProject) {
       throw new NotFoundException(`Project #${projectId} not found`);
     }
-    // Remove organization from the user's organizations array
-    await this.userModel.findByIdAndUpdate(deletedProject.get('sponsor'), {
-      $pull: { projects: projectId },
-    });
     // Remove project from the organization's projects array
     await this.organizationModel.findByIdAndUpdate(
       deletedProject.get('organization'),

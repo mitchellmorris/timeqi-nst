@@ -21,10 +21,7 @@ export class OrganizationService {
   async createOrganization(
     createOrganizationDto: CreateOrganizationDto,
   ): Promise<IOrganization> {
-    const newOrganization = new this.organizationModel({
-      ...createOrganizationDto,
-      users: [createOrganizationDto.sponsor], // initialize users array with sponsor
-    });
+    const newOrganization = new this.organizationModel(createOrganizationDto);
     // Add organization to the user's organizations array
     await this.userModel.findByIdAndUpdate(createOrganizationDto.sponsor, {
       $addToSet: { organizations: newOrganization._id },

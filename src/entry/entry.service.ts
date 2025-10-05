@@ -19,10 +19,6 @@ export class EntryService {
    */
   async createEntry(createEntryDto: CreateEntryDto): Promise<IEntry> {
     const newEntry = new this.entryModel(createEntryDto);
-    // Add entry to the task's entries array
-    await this.taskModel.findByIdAndUpdate(createEntryDto.task, {
-      $addToSet: { entries: newEntry._id },
-    });
     return newEntry.save();
   }
   /**
@@ -78,10 +74,6 @@ export class EntryService {
     if (!deletedEntry) {
       throw new NotFoundException(`Entry #${entryId} not found`);
     }
-    // Remove entry from the task's entries array
-    await this.taskModel.findByIdAndUpdate(deletedEntry.task, {
-      $pull: { entries: deletedEntry._id },
-    });
     return deletedEntry;
   }
 }
