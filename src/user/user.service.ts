@@ -67,10 +67,6 @@ export class UserService {
           },
         ],
       })
-      .populate({
-        path: 'timeOff',
-        select: '_id name',
-      })
       .exec();
     if (!existingUser) {
       throw new NotFoundException(`User #${userId} not found`);
