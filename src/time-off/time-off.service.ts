@@ -81,16 +81,6 @@ export class TimeOffService {
 
     let existingTimeOff: ITimeOff | null = null;
     switch (timeOff.type) {
-      case 'User':
-        existingTimeOff = await this.timeOffModel
-          .findById(timeOffId)
-          .populate({
-            path: 'target',
-            select: '_id name',
-            model: 'User',
-          })
-          .exec();
-        break;
       case 'Organization':
         existingTimeOff = await this.timeOffModel
           .findById(timeOffId)
@@ -111,13 +101,20 @@ export class TimeOffService {
           })
           .exec();
         break;
+      case 'Task':
+        existingTimeOff = await this.timeOffModel
+          .findById(timeOffId)
+          .populate({
+            path: 'target',
+            select: '_id name',
+            model: 'Task',
+          })
+          .exec();
+        break;
       default:
         existingTimeOff = timeOff;
     }
-    if (!existingTimeOff) {
-      throw new NotFoundException(`TimeOff #${timeOffId} not found`);
-    }
-    return existingTimeOff;
+    return existingTimeOff as ITimeOff;
   }
   /**
    * Deletes a time off by its ID.
