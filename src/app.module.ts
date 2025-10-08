@@ -24,6 +24,12 @@ import { TimeOffSchema } from './schemas/time-off.schema';
 import { ProjectUserController } from './project-user/project-user.controller';
 import { ProjectUserService } from './project-user/project-user.service';
 import { ProjectUserSchema } from './schemas/project.user.schema';
+import { OrganizationUserController } from './organization-user/organization-user.controller';
+import { OrganizationUserService } from './organization-user/organization-user.service';
+import { TaskUserController } from './task-user/task-user.controller';
+import { TaskUserService } from './task-user/task-user.service';
+import { TaskUserSchema } from './schemas/task.user.schema';
+import { OrganizationUserSchema } from './schemas/organization.user.schema';
 
 @Module({
   imports: [
@@ -39,10 +45,18 @@ import { ProjectUserSchema } from './schemas/project.user.schema';
     MongooseModule.forFeature([
       { name: 'ProjectUser', schema: ProjectUserSchema },
     ]),
+    MongooseModule.forFeature([{ name: 'TaskUser', schema: TaskUserSchema }]),
+    MongooseModule.forFeature([
+      { name: 'OrganizationUser', schema: OrganizationUserSchema },
+    ]),
     AuthModule,
     UserModule,
     ConfigModule.forRoot({
       isGlobal: true, // Makes the ConfigModule available globally
+      // // Load environment variables from .env file
+      // envFilePath: [
+      //   `.env${process.env.NODE_ENV ? '.' + process.env.NODE_ENV : ''}`,
+      // ],
     }),
   ],
   controllers: [
@@ -53,6 +67,8 @@ import { ProjectUserSchema } from './schemas/project.user.schema';
     EntryController,
     TimeOffController,
     ProjectUserController,
+    OrganizationUserController,
+    TaskUserController,
   ],
   providers: [
     AppService,
@@ -62,6 +78,8 @@ import { ProjectUserSchema } from './schemas/project.user.schema';
     EntryService,
     TimeOffService,
     ProjectUserService,
+    OrganizationUserService,
+    TaskUserService,
   ],
 })
 export class AppModule {}

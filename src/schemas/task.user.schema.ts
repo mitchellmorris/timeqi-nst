@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import { User } from './user.schema';
 import { Task } from './task.schema';
+import { Organization } from './organization.schema';
 import { SchemaMixin } from './schema-mixin';
 import { Scenario } from './scenario.schema';
 import { Project } from '@betavc/timeqi-sh';
@@ -26,6 +27,9 @@ export class TaskUser extends BaseSchema {
 
   @Prop({ type: Date })
   updatedAt: Date;
+
+  @Prop({ type: Types.ObjectId, ref: 'Organization', required: true })
+  organization: Types.ObjectId | Organization;
 
   @Prop({ type: Types.ObjectId, ref: 'Project', required: true })
   project: Types.ObjectId | Project;

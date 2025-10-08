@@ -1,4 +1,4 @@
-import { IntersectionType, OmitType, PartialType } from '@nestjs/mapped-types';
+import { IntersectionType, OmitType } from '@nestjs/mapped-types';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { Types } from 'mongoose';
 import { IsObjectId } from 'nestjs-object-id';
@@ -11,7 +11,7 @@ export class CreateTaskDto extends IntersectionType(
   SchedulingDto,
   OmitType(CreateScenarioDto, [
     // forecast is maintained through entries
-    'forecast'
+    'forecast',
   ] as const),
 ) {
   @IsString()
@@ -24,6 +24,9 @@ export class CreateTaskDto extends IntersectionType(
 
   @IsObjectId()
   assignee: Types.ObjectId;
+
+  @IsObjectId()
+  sponsor: Types.ObjectId;
 
   @IsObjectId()
   @IsNotEmpty()

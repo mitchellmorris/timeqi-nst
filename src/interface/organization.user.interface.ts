@@ -1,10 +1,9 @@
 import { Document, Types } from 'mongoose';
-import { IOrganization as OrganizationUser } from '@betavc/timeqi-sh';
 
-export type IOrganizationUser = OrganizationUser &
-  Document & {
-    readonly user?: Types.ObjectId;
-    readonly organization?: Types.ObjectId;
-    readonly projects?: Types.ObjectId[];
-    readonly entries?: Types.ObjectId[];
-  };
+export interface IOrganizationUser extends Document {
+  _id: Types.ObjectId;
+  organization: Types.ObjectId;
+  user: Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
+}
