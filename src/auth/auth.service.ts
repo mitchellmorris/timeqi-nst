@@ -11,7 +11,7 @@ export class AuthService {
 
   async signIn(email: string, pass: string): Promise<{ access_token: string }> {
     const user = await this.userService.findOneByEmail(email);
-    if (user?.password !== pass) {
+    if (!user || user.password !== pass) {
       throw new UnauthorizedException();
     }
     const payload = { sub: user._id, email: user.email };
