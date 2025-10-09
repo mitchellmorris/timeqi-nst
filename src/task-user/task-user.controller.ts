@@ -11,8 +11,8 @@ import {
   Res,
 } from '@nestjs/common';
 import { TaskUserService } from './task-user.service';
-import { CreateTaskUserDto } from 'src/dto/create-task.user';
-import { UpdateTaskUserDto } from 'src/dto/update-task.user.dto';
+import { CreateTaskUserDto } from '../dto/create-task.user';
+import { UpdateTaskUserDto } from '../dto/update-task.user.dto';
 import { response, Response } from 'express';
 
 @Controller('task-user')

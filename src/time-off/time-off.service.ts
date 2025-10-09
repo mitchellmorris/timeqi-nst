@@ -4,12 +4,12 @@ import {
   // NotFoundException
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { CreateTimeOffDto } from 'src/dto/create-time-off.dto';
-import { ITimeOff } from 'src/interface/time-off.interface';
+import { CreateTimeOffDto } from '../dto/create-time-off.dto';
+import { ITimeOff } from '../interface/time-off.interface';
 import { Model } from 'mongoose';
-// import { UpdateTimeOffDto } from 'src/dto/update-time-off.dto';
-import { IUser } from 'src/interface/user.interface';
-import { UpdateTimeOffDto } from 'src/dto/update-time-off.dto';
+// import { UpdateTimeOffDto } from '../dto/update-time-off.dto';
+import { IUser } from '../interface/user.interface';
+import { UpdateTimeOffDto } from '../dto/update-time-off.dto';
 
 @Injectable()
 export class TimeOffService {

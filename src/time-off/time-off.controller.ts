@@ -16,10 +16,10 @@ import {
   // Res,
 } from '@nestjs/common';
 import { TimeOffService } from './time-off.service';
-import { CreateTimeOffDto } from 'src/dto/create-time-off.dto';
-// import { UpdateTimeOffDto } from 'src/dto/update-time-off.dto';
+import { CreateTimeOffDto } from '../dto/create-time-off.dto';
+// import { UpdateTimeOffDto } from '../dto/update-time-off.dto';
 import { Response } from 'express';
-import { UpdateTimeOffDto } from 'src/dto/update-time-off.dto';
+import { UpdateTimeOffDto } from '../dto/update-time-off.dto';
 
 @Controller('time-off')
 export class TimeOffController {

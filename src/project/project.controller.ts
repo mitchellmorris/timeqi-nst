@@ -11,8 +11,8 @@ import {
   Res,
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
-import { CreateProjectDto } from 'src/dto/create-project.dto';
-import { UpdateProjectDto } from 'src/dto/update-project.dto';
+import { CreateProjectDto } from '../dto/create-project.dto';
+import { UpdateProjectDto } from '../dto/update-project.dto';
 import { Response } from 'express';
 
 @Controller('project')

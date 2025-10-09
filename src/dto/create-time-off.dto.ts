@@ -1,7 +1,7 @@
 import { IsISO8601, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { Types } from 'mongoose';
 import { IsObjectId } from 'nestjs-object-id';
-import { ITimeOff } from 'src/interface/time-off.interface';
+import { ITimeOff } from '../interface/time-off.interface';
 
 export class CreateTimeOffDto {
   @IsString()

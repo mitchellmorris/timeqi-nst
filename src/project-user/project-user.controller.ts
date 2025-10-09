@@ -11,7 +11,7 @@ import {
   Res,
 } from '@nestjs/common';
 import { ProjectUserService } from './project-user.service';
-import { CreateProjectUserDto } from 'src/dto/create-project.user.dto';
+import { CreateProjectUserDto } from '../dto/create-project.user.dto';
 import { response, Response } from 'express';
 
 @Controller('project-user')

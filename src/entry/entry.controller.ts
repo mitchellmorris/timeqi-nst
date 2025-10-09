@@ -12,8 +12,8 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { EntryService } from './entry.service';
-import { CreateEntryDto } from 'src/dto/create-entry.dto';
-import { UpdateEntryDto } from 'src/dto/update-entry.dto';
+import { CreateEntryDto } from '../dto/create-entry.dto';
+import { UpdateEntryDto } from '../dto/update-entry.dto';
 
 @Controller('entry')
 export class EntryController {

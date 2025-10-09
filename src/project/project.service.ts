@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { CreateProjectDto } from 'src/dto/create-project.dto';
-import { IProject } from 'src/interface/project.interface';
+import { CreateProjectDto } from '../dto/create-project.dto';
+import { IProject } from '../interface/project.interface';
 import { Model } from 'mongoose';
-import { UpdateProjectDto } from 'src/dto/update-project.dto';
-import { IUser } from 'src/interface/user.interface';
-import { IOrganization } from 'src/interface/organization.interface';
+import { UpdateProjectDto } from '../dto/update-project.dto';
+import { IUser } from '../interface/user.interface';
+import { IOrganization } from '../interface/organization.interface';
 
 @Injectable()
 export class ProjectService {

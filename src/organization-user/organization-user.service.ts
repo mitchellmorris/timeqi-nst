@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { IOrganizationUser } from 'src/interface/organization.user.interface';
+import { IOrganizationUser } from '../interface/organization.user.interface';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateOrganizationUserDto } from 'src/dto/create-organization.user.dto';
-import { UpdateOrganizationUserDto } from 'src/dto/update-organization.user.dto';
-import { IUser } from 'src/interface/user.interface';
-import { IOrganization } from 'src/interface/organization.interface';
+import { CreateOrganizationUserDto } from '../dto/create-organization.user.dto';
+import { UpdateOrganizationUserDto } from '../dto/update-organization.user.dto';
+import { IUser } from '../interface/user.interface';
+import { IOrganization } from '../interface/organization.interface';
 
 @Injectable()
 export class OrganizationUserService {

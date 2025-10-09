@@ -11,8 +11,8 @@ import {
   Res,
 } from '@nestjs/common';
 import { OrganizationUserService } from './organization-user.service';
-import { CreateOrganizationUserDto } from 'src/dto/create-organization.user.dto';
-import { UpdateOrganizationUserDto } from 'src/dto/update-organization.user.dto';
+import { CreateOrganizationUserDto } from '../dto/create-organization.user.dto';
+import { UpdateOrganizationUserDto } from '../dto/update-organization.user.dto';
 import { response, Response } from 'express';
 
 @Controller('organization-user')

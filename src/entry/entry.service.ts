@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { CreateEntryDto } from 'src/dto/create-entry.dto';
-import { IEntry } from 'src/interface/entry.interface';
+import { CreateEntryDto } from '../dto/create-entry.dto';
+import { IEntry } from '../interface/entry.interface';
 import { Model } from 'mongoose';
-import { UpdateEntryDto } from 'src/dto/update-entry.dto';
-import { ITask } from 'src/interface/task.interface';
+import { UpdateEntryDto } from '../dto/update-entry.dto';
+import { ITask } from '../interface/task.interface';
 
 @Injectable()
 export class EntryService {

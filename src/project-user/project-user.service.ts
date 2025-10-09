@@ -3,12 +3,12 @@ import {
   NotFoundException,
   // NotFoundException
 } from '@nestjs/common';
-import { IProjectUser } from 'src/interface/project.user.interface';
+import { IProjectUser } from '../interface/project.user.interface';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateProjectUserDto } from 'src/dto/create-project.user.dto';
-import { IUser } from 'src/interface/user.interface';
-import { IProject } from 'src/interface/project.interface';
+import { CreateProjectUserDto } from '../dto/create-project.user.dto';
+import { IUser } from '../interface/user.interface';
+import { IProject } from '../interface/project.interface';
 
 @Injectable()
 export class ProjectUserService {

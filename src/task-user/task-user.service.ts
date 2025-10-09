@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ITaskUser } from 'src/interface/task.user.interface';
+import { ITaskUser } from '../interface/task.user.interface';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateTaskUserDto } from 'src/dto/create-task.user';
-import { UpdateTaskUserDto } from 'src/dto/update-task.user.dto';
-import { IUser } from 'src/interface/user.interface';
-import { ITask } from 'src/interface/task.interface';
+import { CreateTaskUserDto } from '../dto/create-task.user';
+import { UpdateTaskUserDto } from '../dto/update-task.user.dto';
+import { IUser } from '../interface/user.interface';
+import { ITask } from '../interface/task.interface';
 
 @Injectable()
 export class TaskUserService {
