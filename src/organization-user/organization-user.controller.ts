@@ -13,7 +13,7 @@ import {
 import { OrganizationUserService } from './organization-user.service';
 import { CreateOrganizationUserDto } from '../dto/create-organization.user.dto';
 import { UpdateOrganizationUserDto } from '../dto/update-organization.user.dto';
-import { response, Response } from 'express';
+import { Response } from 'express';
 
 @Controller('organization-user')
 export class OrganizationUserController {
@@ -60,6 +60,7 @@ export class OrganizationUserController {
   async updateOrganizationUser(
     @Param('id') organizationUserId: string,
     @Body() updateOrganizationUserDto: UpdateOrganizationUserDto,
+    @Res() response?: Response,
   ) {
     try {
       const existingOrganizationUser =
@@ -72,13 +73,23 @@ export class OrganizationUserController {
         existingOrganizationUser,
       };
     } catch ({ status, response: err }) {
-      return response
-        .status(
-          typeof status === 'number'
-            ? status
-            : HttpStatus.INTERNAL_SERVER_ERROR,
-        )
-        .json(err);
+      if (response) {
+        return response
+          .status(
+            typeof status === 'number'
+              ? status
+              : HttpStatus.INTERNAL_SERVER_ERROR,
+          )
+          .json(err);
+      }
+      const errorMessage =
+        err && typeof err === 'object' && 'message' in err
+          ? ((err as Record<string, unknown>).message as string)
+          : 'Internal server error';
+      throw new HttpException(
+        errorMessage,
+        typeof status === 'number' ? status : HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
