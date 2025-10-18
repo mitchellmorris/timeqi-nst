@@ -313,10 +313,17 @@ describe('TimeOffService', () => {
     });
 
     it('should return a time off by ID with Organization population', async () => {
-      // Arrange - Create organization and time off
+      // Arrange - Create user, organization and time off
+      const user = new userModel({
+        name: 'Test User',
+        email: `test-${Date.now()}-${Math.random()}@example.com`,
+        password: 'password123',
+      });
+      const savedUser = await user.save();
+
       const organization = new organizationModel({
         name: 'Test Organization',
-        sponsor: '507f1f77bcf86cd799439011',
+        sponsor: savedUser._id,
       });
       const savedOrganization = await organization.save();
 
@@ -343,11 +350,24 @@ describe('TimeOffService', () => {
     });
 
     it('should return a time off by ID with Project population', async () => {
-      // Arrange - Create project and time off
+      // Arrange - Create user, organization, project and time off
+      const user = new userModel({
+        name: 'Test User',
+        email: `test-${Date.now()}-${Math.random()}@example.com`,
+        password: 'password123',
+      });
+      const savedUser = await user.save();
+
+      const organization = new organizationModel({
+        name: 'Test Organization',
+        sponsor: savedUser._id,
+      });
+      const savedOrganization = await organization.save();
+
       const project = new projectModel({
         name: 'Test Project',
-        sponsor: '507f1f77bcf86cd799439011',
-        organization: '507f1f77bcf86cd799439012',
+        sponsor: savedUser._id,
+        organization: savedOrganization._id,
       });
       const savedProject = await project.save();
 

@@ -107,7 +107,7 @@ describe('TaskUserService', () => {
     await userModel.create({
       _id: userId,
       name: 'Test User',
-      email: 'testuser@example.com',
+      email: generateUniqueEmail('testuser'),
       password: 'hashedpassword',
       organizations: [organizationId],
     });

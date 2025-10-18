@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { ProjectUserService } from './project-user.service';
 import { CreateProjectUserDto } from '../dto/create-project.user.dto';
-import { response, Response } from 'express';
+import { Response } from 'express';
 
 @Controller('project-user')
 export class ProjectUserController {
@@ -66,14 +66,11 @@ export class ProjectUserController {
         message: 'ProjectUser has been updated successfully',
         existingProjectUser,
       };
-    } catch ({ status, response: err }) {
-      return response
-        .status(
-          typeof status === 'number'
-            ? status
-            : HttpStatus.INTERNAL_SERVER_ERROR,
-        )
-        .json(err);
+    } catch {
+      throw new HttpException(
+        { message: 'Error updating project user' },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
   /**

@@ -72,20 +72,9 @@ describe('OrganizationUserService', () => {
     }
   });
 
-  // Clean the database before each test for isolation
+  // Setup test data before each test
   beforeEach(async () => {
-    // Clean all collections
-    if (organizationUserModel) {
-      await organizationUserModel.deleteMany({});
-    }
-    if (userModel) {
-      await userModel.deleteMany({});
-    }
-    if (organizationModel) {
-      await organizationModel.deleteMany({});
-    }
-
-    // Create test data
+    // Create test data with new IDs
     organizationId = new Types.ObjectId();
     userId = new Types.ObjectId();
 
@@ -93,7 +82,7 @@ describe('OrganizationUserService', () => {
     await userModel.create({
       _id: userId,
       name: 'Test User',
-      email: 'testuser@example.com',
+      email: generateUniqueEmail('testuser'),
       password: 'hashedpassword',
       organizations: [],
     });
@@ -198,6 +187,9 @@ describe('OrganizationUserService', () => {
 
   describe('getAllOrganizationUsers', () => {
     it('should return all organization users', async () => {
+      // Clean organization users collection to ensure test starts fresh
+      await organizationUserModel.deleteMany({});
+
       const createOrganizationUserDto = createCompleteDto(
         organizationId,
         userId,
@@ -220,6 +212,9 @@ describe('OrganizationUserService', () => {
     });
 
     it('should throw NotFoundException when no organization users exist', async () => {
+      // Clean organization users collection to ensure no data exists
+      await organizationUserModel.deleteMany({});
+
       await expect(service.getAllOrganizationUsers()).rejects.toThrow(
         'OrganizationUsers data not found!',
       );
@@ -308,6 +303,9 @@ describe('OrganizationUserService', () => {
     let createdOrganizationUser: OrganizationUser;
 
     beforeEach(async () => {
+      // Clean organization users collection before each test in this describe block
+      await organizationUserModel.deleteMany({});
+
       const createOrganizationUserDto = createCompleteDto(
         organizationId,
         userId,

@@ -47,7 +47,7 @@ describe('UserService', () => {
 
   // Clean the database before each test for isolation
   beforeEach(async () => {
-    // Only clean if userModel exists
+    // Clean all collections sequentially to avoid race conditions
     if (userModel) {
       await userModel.deleteMany({});
     }
@@ -75,7 +75,7 @@ describe('UserService', () => {
       // Arrange
       const createUserDto: CreateUserDto = {
         name: 'John Doe',
-        email: 'john.doe@example.com',
+        email: `john.doe-${Date.now()}-${Math.random()}@example.com`,
         password: 'securePassword123',
       };
 
@@ -94,7 +94,7 @@ describe('UserService', () => {
       // Arrange
       const createUserDto: CreateUserDto = {
         name: 'Jane Smith',
-        email: 'jane.smith@example.com',
+        email: `jane.smith-${Date.now()}-${Math.random()}@example.com`,
         password: 'anotherPassword456',
       };
 
@@ -148,7 +148,7 @@ describe('UserService', () => {
       // Arrange
       const user = new userModel({
         name: 'Test User',
-        email: 'test@example.com',
+        email: `test-${Date.now()}-${Math.random()}@example.com`,
         password: 'testpass',
       });
       const savedUser = await user.save();
@@ -159,7 +159,7 @@ describe('UserService', () => {
       // Assert
       expect(result).toBeDefined();
       expect(result.name).toBe('Test User');
-      expect(result.email).toBe('test@example.com');
+      expect(result.email).toBe(savedUser.email);
       expect(result.password).toBeUndefined(); // Should be excluded by select
     });
 
@@ -182,14 +182,14 @@ describe('UserService', () => {
       // Arrange
       const user = new userModel({
         name: 'Original Name',
-        email: 'original@example.com',
+        email: `original-${Date.now()}-${Math.random()}@example.com`,
         password: 'originalpass',
       });
       const savedUser = await user.save();
 
       const updateUserDto: UpdateUserDto = {
         name: 'Updated Name',
-        email: 'updated@example.com',
+        email: `updated-${Date.now()}-${Math.random()}@example.com`,
       };
 
       // Act
@@ -201,7 +201,7 @@ describe('UserService', () => {
       // Assert
       expect(result).toBeDefined();
       expect(result.name).toBe('Updated Name');
-      expect(result.email).toBe('updated@example.com');
+      expect(result.email).toBe(updateUserDto.email);
       expect(result.password).toBe('originalpass'); // Should remain unchanged
     });
 
@@ -225,18 +225,18 @@ describe('UserService', () => {
       // Arrange
       const user = new userModel({
         name: 'Email Test User',
-        email: 'email.test@example.com',
+        email: `email.test-${Date.now()}-${Math.random()}@example.com`,
         password: 'emailpass',
       });
       await user.save();
 
       // Act
-      const result = await service.findOneByEmail('email.test@example.com');
+      const result = await service.findOneByEmail(user.email);
 
       // Assert
       expect(result).toBeDefined();
       expect(result!.name).toBe('Email Test User');
-      expect(result!.email).toBe('email.test@example.com');
+      expect(result!.email).toBe(user.email);
     });
 
     it('should return null for non-existent email', async () => {
@@ -253,7 +253,7 @@ describe('UserService', () => {
       // Arrange
       const user = new userModel({
         name: 'To Be Deleted',
-        email: 'delete@example.com',
+        email: `delete-${Date.now()}-${Math.random()}@example.com`,
         password: 'deletepass',
       });
       const savedUser = await user.save();

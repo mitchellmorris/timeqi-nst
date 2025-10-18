@@ -9,14 +9,17 @@ import { Model } from 'mongoose';
 import { CreateProjectUserDto } from '../dto/create-project.user.dto';
 import { IUser } from '../interface/user.interface';
 import { IProject } from '../interface/project.interface';
+import { ProjectUser } from '../schemas/project.user.schema';
+import { User } from '../schemas/user.schema';
+import { Project } from '../schemas/project.schema';
 
 @Injectable()
 export class ProjectUserService {
   constructor(
-    @InjectModel('ProjectUser')
+    @InjectModel(ProjectUser.name)
     private readonly projectUserModel: Model<IProjectUser>,
-    @InjectModel('User') private userModel: Model<IUser>,
-    @InjectModel('Project') private projectModel: Model<IProject>,
+    @InjectModel(User.name) private userModel: Model<IUser>,
+    @InjectModel(Project.name) private projectModel: Model<IProject>,
   ) {}
   /**
    * Creates a new organization in the database.
