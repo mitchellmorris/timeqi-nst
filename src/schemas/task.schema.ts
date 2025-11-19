@@ -19,6 +19,9 @@ export class Task extends BaseSchema {
   @Prop({ type: Number, required: true })
   index: number;
 
+  @Prop({ type: Boolean, default: false })
+  locked: boolean;
+
   @Prop({ type: Date, default: Date.now })
   createdAt: Date;
 

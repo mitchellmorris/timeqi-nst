@@ -67,7 +67,7 @@ export class OrganizationService {
   async getOrganization(organizationId: string): Promise<IOrganization> {
     const existingOrganization = await this.organizationModel
       .findById(organizationId)
-      .select('-users')
+      // .select('-users')
       .populate({
         path: 'projects',
         select: '_id name',
@@ -78,6 +78,10 @@ export class OrganizationService {
       })
       .populate({
         path: 'timeOff',
+        select: '_id name',
+      })
+      .populate({
+        path: 'users',
         select: '_id name',
       })
       .exec();
