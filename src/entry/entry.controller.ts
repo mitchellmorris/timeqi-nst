@@ -74,17 +74,18 @@ export class EntryController {
         .json(err);
     }
   }
+  // TODO: Entries not entries.  Rename everywhere.
   /**
    * Retrieves all entries.
    * @param response - The response object to send the result.
    * @returns A JSON response with the status and all entry data.
    */
   @Get()
-  async getEntrys(@Res() response: Response) {
+  async getEntries(@Res() response: Response) {
     try {
-      const entryData = await this.entryService.getAllEntrys();
+      const entryData = await this.entryService.getAllEntries();
       return response.status(HttpStatus.OK).json({
-        message: 'All entrys data found successfully',
+        message: 'All entries data found successfully',
         entryData,
       });
     } catch ({ status, response: err }) {
@@ -105,7 +106,7 @@ export class EntryController {
     try {
       const entryData = await this.entryService.getProjectEntries(projectId);
       return response.status(HttpStatus.OK).json({
-        message: 'All entrys data found successfully',
+        message: 'All entries data found successfully',
         entryData,
       });
     } catch ({ status, response: err }) {

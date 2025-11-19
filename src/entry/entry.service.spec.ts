@@ -208,7 +208,7 @@ describe('EntryService', () => {
     });
   });
 
-  describe('getAllEntrys', () => {
+  describe('getAllEntries', () => {
     it('should return all entries when entries exist', async () => {
       // Arrange - Create test entries
       const entry1 = new entryModel({
@@ -237,7 +237,7 @@ describe('EntryService', () => {
       await entry2.save();
 
       // Act
-      const result = await service.getAllEntrys();
+      const result = await service.getAllEntries();
 
       // Assert
       expect(result).toBeDefined();
@@ -248,9 +248,9 @@ describe('EntryService', () => {
 
     it('should throw NotFoundException when no entries exist', async () => {
       // Act & Assert
-      await expect(service.getAllEntrys()).rejects.toThrow(NotFoundException);
-      await expect(service.getAllEntrys()).rejects.toThrow(
-        'Entrys data not found!',
+      await expect(service.getAllEntries()).rejects.toThrow(NotFoundException);
+      await expect(service.getAllEntries()).rejects.toThrow(
+        'Entries data not found!',
       );
     });
   });

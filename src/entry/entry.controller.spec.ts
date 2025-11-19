@@ -16,7 +16,7 @@ describe('EntryController', () => {
   const mockEntryService = {
     createEntry: jest.fn(),
     updateEntry: jest.fn(),
-    getAllEntrys: jest.fn(),
+    getAllEntries: jest.fn(),
     getEntry: jest.fn(),
     deleteEntry: jest.fn(),
   };
@@ -322,7 +322,7 @@ describe('EntryController', () => {
     });
   });
 
-  describe('getEntrys', () => {
+  describe('getEntries', () => {
     const entriesData = [
       mockEntry,
       { ...mockEntry, _id: new Types.ObjectId('507f1f77bcf86cd799439016') },
@@ -330,16 +330,16 @@ describe('EntryController', () => {
 
     it('should get all entries successfully', async () => {
       // Arrange
-      mockEntryService.getAllEntrys.mockResolvedValue(entriesData);
+      mockEntryService.getAllEntries.mockResolvedValue(entriesData);
 
       // Act
-      await controller.getEntrys(mockResponse as Response);
+      await controller.getEntries(mockResponse as Response);
 
       // Assert
-      expect(entryService.getAllEntrys).toHaveBeenCalled();
+      expect(entryService.getAllEntries).toHaveBeenCalled();
       expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.OK);
       expect(mockResponse.json).toHaveBeenCalledWith({
-        message: 'All entrys data found successfully',
+        message: 'All entries data found successfully',
         entryData: entriesData,
       });
     });
@@ -354,13 +354,13 @@ describe('EntryController', () => {
           error: 'Not Found',
         },
       };
-      mockEntryService.getAllEntrys.mockRejectedValue(notFoundError);
+      mockEntryService.getAllEntries.mockRejectedValue(notFoundError);
 
       // Act
-      await controller.getEntrys(mockResponse as Response);
+      await controller.getEntries(mockResponse as Response);
 
       // Assert
-      expect(entryService.getAllEntrys).toHaveBeenCalled();
+      expect(entryService.getAllEntries).toHaveBeenCalled();
       expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.NOT_FOUND);
       expect(mockResponse.json).toHaveBeenCalledWith(notFoundError.response);
     });
@@ -370,13 +370,13 @@ describe('EntryController', () => {
       const serviceError = {
         response: { message: 'Database connection failed' },
       };
-      mockEntryService.getAllEntrys.mockRejectedValue(serviceError);
+      mockEntryService.getAllEntries.mockRejectedValue(serviceError);
 
       // Act
-      await controller.getEntrys(mockResponse as Response);
+      await controller.getEntries(mockResponse as Response);
 
       // Assert
-      expect(entryService.getAllEntrys).toHaveBeenCalled();
+      expect(entryService.getAllEntries).toHaveBeenCalled();
       expect(mockResponse.status).toHaveBeenCalledWith(
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
@@ -385,16 +385,16 @@ describe('EntryController', () => {
 
     it('should return empty array when no entries exist', async () => {
       // Arrange
-      mockEntryService.getAllEntrys.mockResolvedValue([]);
+      mockEntryService.getAllEntries.mockResolvedValue([]);
 
       // Act
-      await controller.getEntrys(mockResponse as Response);
+      await controller.getEntries(mockResponse as Response);
 
       // Assert
-      expect(entryService.getAllEntrys).toHaveBeenCalled();
+      expect(entryService.getAllEntries).toHaveBeenCalled();
       expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.OK);
       expect(mockResponse.json).toHaveBeenCalledWith({
-        message: 'All entrys data found successfully',
+        message: 'All entries data found successfully',
         entryData: [],
       });
     });
@@ -624,15 +624,15 @@ describe('EntryController', () => {
 
     it('should handle response object methods correctly', async () => {
       // Arrange
-      mockEntryService.getAllEntrys.mockResolvedValue([mockEntry]);
+      mockEntryService.getAllEntries.mockResolvedValue([mockEntry]);
 
       // Act
-      await controller.getEntrys(mockResponse as Response);
+      await controller.getEntries(mockResponse as Response);
 
       // Assert
       expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.OK);
       expect(mockResponse.json).toHaveBeenCalledWith({
-        message: 'All entrys data found successfully',
+        message: 'All entries data found successfully',
         entryData: [mockEntry],
       });
       expect(mockResponse.status).toHaveBeenCalledTimes(1);

@@ -42,19 +42,19 @@ export class EntryService {
     return existingEntry;
   }
   /**
-   * Retrieves all entrys from the database.
-   * @returns An array of entrys.
+   * Retrieves all entries from the database.
+   * @returns An array of entries.
    */
-  async getAllEntrys(): Promise<IEntry[]> {
+  async getAllEntries(): Promise<IEntry[]> {
     const entryData = await this.entryModel.find();
     if (!entryData || entryData.length == 0) {
-      throw new NotFoundException('Entrys data not found!');
+      throw new NotFoundException('Entries data not found!');
     }
     return entryData;
   }
   /**
-   * Retrieves all entrys from the database.
-   * @returns An array of entrys.
+   * Retrieves all entries from the database.
+   * @returns An array of entries.
    */
   async getProjectEntries(projectId: string): Promise<IEntry[]> {
     const entryData = await this.entryModel.find({
@@ -62,7 +62,7 @@ export class EntryService {
     });
     if (!entryData || entryData.length == 0) {
       throw new NotFoundException(
-        `Entrys data for project ${projectId} not found!`,
+        `Entries data for project ${projectId} not found!`,
       );
     }
     return entryData;
