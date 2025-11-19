@@ -74,7 +74,6 @@ export class EntryController {
         .json(err);
     }
   }
-  // TODO: Entries not entries.  Rename everywhere.
   /**
    * Retrieves all entries.
    * @param response - The response object to send the result.
