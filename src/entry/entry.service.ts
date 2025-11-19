@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateEntryDto } from '../dto/create-entry.dto';
 import { IEntry } from '../interface/entry.interface';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { UpdateEntryDto } from '../dto/update-entry.dto';
 import { ITask } from '../interface/task.interface';
 
@@ -49,6 +49,21 @@ export class EntryService {
     const entryData = await this.entryModel.find();
     if (!entryData || entryData.length == 0) {
       throw new NotFoundException('Entrys data not found!');
+    }
+    return entryData;
+  }
+  /**
+   * Retrieves all entrys from the database.
+   * @returns An array of entrys.
+   */
+  async getProjectEntries(projectId: string): Promise<IEntry[]> {
+    const entryData = await this.entryModel.find({
+      project: new Types.ObjectId(projectId),
+    });
+    if (!entryData || entryData.length == 0) {
+      throw new NotFoundException(
+        `Entrys data for project ${projectId} not found!`,
+      );
     }
     return entryData;
   }

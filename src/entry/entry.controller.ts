@@ -97,6 +97,27 @@ export class EntryController {
         .json(err);
     }
   }
+  @Get('/project/:projectId')
+  async getProjectEntries(
+    @Res() response: Response,
+    @Param('projectId') projectId: string,
+  ) {
+    try {
+      const entryData = await this.entryService.getProjectEntries(projectId);
+      return response.status(HttpStatus.OK).json({
+        message: 'All entrys data found successfully',
+        entryData,
+      });
+    } catch ({ status, response: err }) {
+      return response
+        .status(
+          typeof status === 'number'
+            ? status
+            : HttpStatus.INTERNAL_SERVER_ERROR,
+        )
+        .json(err);
+    }
+  }
   /**
    * Retrieves an entry by ID.
    * @param response - The response object to send the result.
