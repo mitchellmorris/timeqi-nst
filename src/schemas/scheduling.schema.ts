@@ -1,7 +1,8 @@
 import { DEFAULT_WORKDAYS } from '@betavc/timeqi-sh';
 import { Prop, Schema } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
 
-@Schema()
+@Schema({ timestamps: false, _id: false })
 export class Scheduling {
   @Prop({ type: Number, default: 8 })
   workshift: number;
@@ -18,3 +19,5 @@ export class Scheduling {
   @Prop({ type: Number, default: 0 })
   endOfDayMin: number;
 }
+
+export type SchedulingDocument = Scheduling & Document;

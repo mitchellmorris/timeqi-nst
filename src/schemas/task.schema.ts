@@ -3,16 +3,12 @@ import { HydratedDocument, Types } from 'mongoose';
 import { User } from './user.schema';
 import { Project } from './project.schema';
 import { Organization } from './organization.schema';
-import { Scenario } from './scenario.schema';
-import { SchemaMixin } from './schema-mixin';
-import { Scheduling } from './scheduling.schema';
-
-const BaseSchema = SchemaMixin([Scenario, Scheduling]);
+import { SchemaFields } from './schema-composition';
 
 export type TaskDocument = HydratedDocument<Task>;
 
-@Schema()
-export class Task extends BaseSchema {
+@Schema({ collection: 'tasks', timestamps: true })
+export class Task {
   @Prop({ type: String, required: true })
   name: string;
 
@@ -21,12 +17,6 @@ export class Task extends BaseSchema {
 
   @Prop({ type: Boolean, default: false })
   locked: boolean;
-
-  @Prop({ type: Date, default: Date.now })
-  createdAt: Date;
-
-  @Prop({ type: Date })
-  updatedAt: Date;
 
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   sponsor: Types.ObjectId | User;
@@ -44,23 +34,19 @@ export class Task extends BaseSchema {
   users: Types.ObjectId[] | User[];
 }
 
-export const TaskSchema = SchemaFactory.createForClass(Task);
+// Create the base schema
+const TaskSchema = SchemaFactory.createForClass(Task);
+
+// Add fields from Scenario and Scheduling schemas
+TaskSchema.add(SchemaFields.scenarioWithScheduling);
 
 TaskSchema.set('toObject', { virtuals: true });
 TaskSchema.set('toJSON', { virtuals: true });
-// Middleware to update the updatedAt field on save and update
-TaskSchema.pre('save', function (next) {
-  this.updatedAt = new Date();
-  next();
-});
-
-TaskSchema.pre('findOneAndUpdate', function (next) {
-  this.set({ updatedAt: new Date() });
-  next();
-});
 
 TaskSchema.virtual('entries', {
   ref: 'Entry',
   localField: '_id',
   foreignField: 'task',
 });
+
+export { TaskSchema };

@@ -1,6 +1,7 @@
 import { Prop, Schema } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
 
-@Schema()
+@Schema({ timestamps: false, _id: false })
 export class Scenario {
   @Prop({ type: Date })
   startDate: Date;
@@ -20,3 +21,5 @@ export class Scenario {
   @Prop({ type: Number, default: 0 })
   elapsedHours: number;
 }
+
+export type ScenarioDocument = Scenario & Document;
