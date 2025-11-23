@@ -76,7 +76,7 @@ export class ProjectService {
       .select('-users')
       .populate({
         path: 'tasks',
-        select: '_id name weekdays assignee',
+        select: '_id name weekdays assignee estimate startDate endDate',
         populate: {
           path: 'assignee',
           select: '_id name',
