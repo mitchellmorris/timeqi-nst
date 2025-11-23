@@ -2,16 +2,11 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import { User } from './user.schema';
 import { Organization } from './organization.schema';
-import { Scheduling } from './scheduling.schema';
-import { Scenario } from './scenario.schema';
-import { SchemaMixin } from './schema-mixin';
+import { SchemaFields } from './schema-composition';
 
 export type ProjectDocument = HydratedDocument<Project>;
-
-const BaseSchema = SchemaMixin([Scheduling, Scenario]);
-
-@Schema()
-export class Project extends BaseSchema {
+@Schema({ collection: 'projects', timestamps: true })
+export class Project {
   @Prop({ type: String, required: true })
   name: string;
 
@@ -32,16 +27,9 @@ export class Project extends BaseSchema {
 }
 
 export const ProjectSchema = SchemaFactory.createForClass(Project);
-// Middleware to update the updatedAt field on save and update
-ProjectSchema.pre('save', function (next) {
-  this.updatedAt = new Date();
-  next();
-});
 
-ProjectSchema.pre('findOneAndUpdate', function (next) {
-  this.set({ updatedAt: new Date() });
-  next();
-});
+// Add fields from Scenario and Scheduling schemas
+ProjectSchema.add(SchemaFields.scenarioWithScheduling);
 
 ProjectSchema.set('toObject', { virtuals: true });
 ProjectSchema.set('toJSON', { virtuals: true });
