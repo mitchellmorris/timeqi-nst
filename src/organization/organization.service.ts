@@ -5,6 +5,10 @@ import { IOrganization } from '../interface/organization.interface';
 import { Model } from 'mongoose';
 import { UpdateOrganizationDto } from '../dto/update-organization.dto';
 import { IUser } from '../interface/user.interface';
+import {
+  PROJECT_PROJECTION_REQUEST_FIELDS,
+  TIME_OFF_PROJECTION_REQUEST_FIELDS,
+} from '@betavc/timeqi-sh';
 
 @Injectable()
 export class OrganizationService {
@@ -70,19 +74,15 @@ export class OrganizationService {
       // .select('-users')
       .populate({
         path: 'projects',
-        select: '_id name',
-        populate: {
-          path: 'sponsor',
-          select: '_id name',
-        },
+        select: PROJECT_PROJECTION_REQUEST_FIELDS as string[],
       })
       .populate({
         path: 'timeOff',
-        select: '_id name',
+        select: TIME_OFF_PROJECTION_REQUEST_FIELDS as string[],
       })
       .populate({
         path: 'users',
-        select: '_id name',
+        select: ['_id', 'name'],
       })
       .exec();
     if (!existingOrganization) {

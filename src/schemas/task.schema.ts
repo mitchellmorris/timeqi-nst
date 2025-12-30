@@ -49,4 +49,11 @@ TaskSchema.virtual('entries', {
   foreignField: 'task',
 });
 
+TaskSchema.virtual('timeOff', {
+  ref: 'TimeOff',
+  localField: '_id',
+  foreignField: 'target',
+  match: { type: 'Task' },
+});
+
 export { TaskSchema };

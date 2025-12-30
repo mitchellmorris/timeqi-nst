@@ -6,6 +6,10 @@ import { Model } from 'mongoose';
 import { UpdateProjectDto } from '../dto/update-project.dto';
 import { IUser } from '../interface/user.interface';
 import { IOrganization } from '../interface/organization.interface';
+import {
+  PROJECT_TASK_PROJECTION_REQUEST_FIELDS,
+  TIME_OFF_PROJECTION_REQUEST_FIELDS,
+} from '@betavc/timeqi-sh';
 
 @Injectable()
 export class ProjectService {
@@ -73,18 +77,17 @@ export class ProjectService {
   async getProject(projectId: string): Promise<IProject> {
     const existingProject = await this.projectModel
       .findById(projectId)
-      .select('-users')
       .populate({
         path: 'tasks',
-        select: '_id name weekdays assignee estimate startDate endDate',
+        select: PROJECT_TASK_PROJECTION_REQUEST_FIELDS as string[],
         populate: {
-          path: 'assignee',
-          select: '_id name',
+          path: 'timeOff',
+          select: TIME_OFF_PROJECTION_REQUEST_FIELDS as string[],
         },
       })
       .populate({
         path: 'timeOff',
-        select: '_id name',
+        select: TIME_OFF_PROJECTION_REQUEST_FIELDS as string[],
       })
       .exec();
     if (!existingProject) {

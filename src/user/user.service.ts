@@ -59,13 +59,7 @@ export class UserService {
       .select('-password -projects -tasks')
       .populate({
         path: 'organizations',
-        select: '_id name',
-        populate: [
-          {
-            path: 'sponsor',
-            select: '_id name',
-          },
-        ],
+        select: '_id name sponsor',
       })
       .exec();
     if (!existingUser) {

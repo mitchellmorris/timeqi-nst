@@ -6,6 +6,9 @@ export class Scenario {
   @Prop({ type: Date })
   startDate: Date;
 
+  @Prop({ type: Number, default: 0 })
+  estimate: number;
+
   @Prop({ type: Date })
   targetDate: Date;
 
@@ -13,13 +16,11 @@ export class Scenario {
   endDate: Date;
 
   @Prop({ type: Number, default: 0 })
-  estimate: number;
-
-  @Prop({ type: Number, default: 0 })
   workedHours: number;
 
-  @Prop({ type: Number, default: 0 })
-  elapsedHours: number;
+  // This might be calculated on the fly
+  // @Prop({ type: Number, default: 0 })
+  // elapsedHours: number;
 }
 
 export type ScenarioDocument = Scenario & Document;

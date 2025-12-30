@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateTaskDto } from '../dto/create-task.dto';
 import { ITask } from '../interface/task.interface';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { UpdateTaskDto } from '../dto/update-task.dto';
 import { IProject } from '../interface/project.interface';
 import { IUser } from '../interface/user.interface';
@@ -36,10 +36,17 @@ export class TaskService {
     taskId: string,
     updateTaskDto: UpdateTaskDto,
   ): Promise<ITask> {
+    if (updateTaskDto.assignee) {
+      updateTaskDto.assignee = new Types.ObjectId(updateTaskDto.assignee);
+    }
+    // hard block forbidden fields
+    delete updateTaskDto['project'];
+    delete updateTaskDto['organization'];
+
     const existingTask = await this.taskModel.findByIdAndUpdate(
       taskId,
       updateTaskDto,
-      { new: true },
+      { new: true, runValidators: true },
     );
     if (!existingTask) {
       throw new NotFoundException(`Task #${taskId} not found`);
@@ -65,14 +72,15 @@ export class TaskService {
   async getTask(taskId: string): Promise<ITask> {
     const existingTask = await this.taskModel
       .findById(taskId)
-      .populate({
-        path: 'entries',
-        select: '_id name',
-        populate: {
-          path: 'performer',
-          select: '_id name',
-        },
-      })
+      // These are fetched elsewhere now
+      // .populate({
+      //   path: 'entries',
+      //   select: '_id name',
+      //   populate: {
+      //     path: 'performer',
+      //     select: '_id name',
+      //   },
+      // })
       .exec();
     if (!existingTask) {
       throw new NotFoundException(`Task #${taskId} not found`);
