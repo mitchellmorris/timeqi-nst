@@ -18,10 +18,10 @@ export class Task {
   @Prop({ type: Boolean, default: false })
   locked: boolean;
 
-  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
+  @Prop({ type: Types.ObjectId, ref: 'User' })
   sponsor: Types.ObjectId | User;
 
-  @Prop({ type: Types.ObjectId, ref: 'User' })
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   assignee: Types.ObjectId | User;
 
   @Prop({ type: Types.ObjectId, ref: 'Organization', required: true })

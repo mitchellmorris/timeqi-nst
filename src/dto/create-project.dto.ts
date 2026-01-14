@@ -1,4 +1,4 @@
-import { IntersectionType, OmitType } from '@nestjs/mapped-types';
+import { IntersectionType } from '@nestjs/mapped-types';
 import { IsNotEmpty, IsString } from 'class-validator';
 import { Types } from 'mongoose';
 import { IsObjectId } from 'nestjs-object-id';
@@ -9,7 +9,8 @@ import { CreateScenarioDto } from './create-scenario.dto';
  */
 export class CreateProjectDto extends IntersectionType(
   SchedulingDto,
-  OmitType(CreateScenarioDto, ['forecast'] as const),
+  CreateScenarioDto,
+  // OmitType(CreateScenarioDto, ['forecast'] as const),
 ) {
   @IsString()
   @IsNotEmpty()

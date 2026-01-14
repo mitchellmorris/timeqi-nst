@@ -79,15 +79,15 @@ export class ProjectService {
       .findById(projectId)
       .populate({
         path: 'tasks',
-        select: PROJECT_TASK_PROJECTION_REQUEST_FIELDS as string[],
+        select: PROJECT_TASK_PROJECTION_REQUEST_FIELDS,
         populate: {
           path: 'timeOff',
-          select: TIME_OFF_PROJECTION_REQUEST_FIELDS as string[],
+          select: TIME_OFF_PROJECTION_REQUEST_FIELDS,
         },
       })
       .populate({
         path: 'timeOff',
-        select: TIME_OFF_PROJECTION_REQUEST_FIELDS as string[],
+        select: TIME_OFF_PROJECTION_REQUEST_FIELDS,
       })
       .exec();
     if (!existingProject) {

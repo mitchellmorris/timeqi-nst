@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateTaskDto } from '../dto/create-task.dto';
 import { ITask } from '../interface/task.interface';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { UpdateTaskDto } from '../dto/update-task.dto';
 import { IProject } from '../interface/project.interface';
 import { IUser } from '../interface/user.interface';
@@ -22,8 +22,9 @@ export class TaskService {
   async createTask(createTaskDto: CreateTaskDto): Promise<ITask> {
     const newTask = new this.taskModel({
       ...createTaskDto,
-      users: [createTaskDto.assignee], // initialize users array with assignee
+      // users: [createTaskDto.assignee], // initialize users array with assignee
     });
+
     return newTask.save();
   }
   /**
@@ -36,9 +37,6 @@ export class TaskService {
     taskId: string,
     updateTaskDto: UpdateTaskDto,
   ): Promise<ITask> {
-    if (updateTaskDto.assignee) {
-      updateTaskDto.assignee = new Types.ObjectId(updateTaskDto.assignee);
-    }
     // hard block forbidden fields
     delete updateTaskDto['project'];
     delete updateTaskDto['organization'];

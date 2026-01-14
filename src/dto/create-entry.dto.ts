@@ -1,12 +1,8 @@
 import { IsISO8601, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { Types } from 'mongoose';
 import { IsObjectId } from 'nestjs-object-id';
-import { CreateScenarioDto } from './create-scenario.dto';
-import { PickType } from '@nestjs/mapped-types';
 
-export class CreateEntryDto extends PickType(CreateScenarioDto, [
-  'forecast',
-] as const) {
+export class CreateEntryDto {
   @IsString()
   @IsNotEmpty()
   readonly name: string;
