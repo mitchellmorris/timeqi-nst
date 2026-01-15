@@ -2,12 +2,12 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateOrganizationDto } from '../dto/create-organization.dto';
 import { IOrganization } from '../interface/organization.interface';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { UpdateOrganizationDto } from '../dto/update-organization.dto';
 import { IUser } from '../interface/user.interface';
 import {
-  PROJECT_PROJECTION_REQUEST_FIELDS,
-  TIME_OFF_PROJECTION_REQUEST_FIELDS,
+  PROJECT_POPULATED_REQUEST_FIELDS,
+  TIME_OFF_POPULATED_REQUEST_FIELDS,
 } from '@betavc/timeqi-sh';
 
 @Injectable()
@@ -24,10 +24,14 @@ export class OrganizationService {
    */
   async createOrganization(
     createOrganizationDto: CreateOrganizationDto,
+    sponsor: Types.ObjectId,
   ): Promise<IOrganization> {
-    const newOrganization = new this.organizationModel(createOrganizationDto);
+    const newOrganization = new this.organizationModel({
+      ...createOrganizationDto,
+      sponsor,
+    });
     // Add organization to the user's organizations array
-    await this.userModel.findByIdAndUpdate(createOrganizationDto.sponsor, {
+    await this.userModel.findByIdAndUpdate(sponsor, {
       $addToSet: { organizations: newOrganization._id },
     });
     return newOrganization.save();
@@ -71,14 +75,13 @@ export class OrganizationService {
   async getOrganization(organizationId: string): Promise<IOrganization> {
     const existingOrganization = await this.organizationModel
       .findById(organizationId)
-      // .select('-users')
       .populate({
         path: 'projects',
-        select: PROJECT_PROJECTION_REQUEST_FIELDS as string[],
+        select: PROJECT_POPULATED_REQUEST_FIELDS as string[],
       })
       .populate({
         path: 'timeOff',
-        select: TIME_OFF_PROJECTION_REQUEST_FIELDS as string[],
+        select: TIME_OFF_POPULATED_REQUEST_FIELDS as string[],
       })
       .populate({
         path: 'users',

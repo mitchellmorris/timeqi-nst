@@ -7,7 +7,7 @@ import { SchemaMixin } from './schema-mixin';
 
 export type OrganizationDocument = HydratedDocument<Organization>;
 const BaseSchema = SchemaMixin([Scheduling]);
-@Schema()
+@Schema({ collection: 'tasks', timestamps: true })
 export class Organization extends BaseSchema {
   @Prop({ type: String, required: true })
   name: string;
@@ -17,12 +17,6 @@ export class Organization extends BaseSchema {
 
   @Prop({ type: [{ type: Types.ObjectId, ref: 'Project', default: [] }] })
   projects: Types.ObjectId[] | Project[];
-
-  @Prop({ type: Date, required: true, default: Date.now })
-  createdAt: Date;
-
-  @Prop({ type: Date })
-  updatedAt: Date;
 }
 
 export const OrganizationSchema = SchemaFactory.createForClass(Organization);
@@ -52,4 +46,5 @@ OrganizationSchema.virtual('timeOff', {
   ref: 'TimeOff',
   localField: '_id',
   foreignField: 'target',
+  match: { type: 'Organization' },
 });

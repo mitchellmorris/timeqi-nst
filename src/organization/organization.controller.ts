@@ -9,11 +9,15 @@ import {
   Post,
   Put,
   Res,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
 import { OrganizationService } from './organization.service';
 import { CreateOrganizationDto } from '../dto/create-organization.dto';
 import { UpdateOrganizationDto } from '../dto/update-organization.dto';
 import { Response } from 'express';
+import { AuthGuard } from '../auth/auth.guard';
+import { Types } from 'mongoose';
 
 @Controller('organization')
 export class OrganizationController {
@@ -24,13 +28,30 @@ export class OrganizationController {
    * @param createOrganizationDto - The data transfer object containing organization details.
    * @returns A JSON response with the status and created organization data.
    */
+  @UseGuards(AuthGuard)
   @Post()
   async createOrganization(
     @Body() createOrganizationDto: CreateOrganizationDto,
+    @Request()
+    req: {
+      user: { sub: string };
+    },
   ): Promise<{ message: string; newOrganization: any }> {
+    // Extend Request type to include 'user'
+    const userId = req.user?.sub;
+    if (!userId) {
+      throw new HttpException(
+        {
+          message: 'Error: User not authenticated',
+          error: 'Bad Request',
+        },
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
     try {
       const newOrganization = await this.organizationService.createOrganization(
         createOrganizationDto,
+        new Types.ObjectId(userId),
       );
       return {
         message: 'Organization has been created successfully',

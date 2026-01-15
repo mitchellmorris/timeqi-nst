@@ -8,7 +8,7 @@ import { IUser } from '../interface/user.interface';
 import { IOrganization } from '../interface/organization.interface';
 import {
   PROJECT_TASK_PROJECTION_REQUEST_FIELDS,
-  TIME_OFF_PROJECTION_REQUEST_FIELDS,
+  TIME_OFF_POPULATED_REQUEST_FIELDS,
 } from '@betavc/timeqi-sh';
 
 @Injectable()
@@ -82,12 +82,12 @@ export class ProjectService {
         select: PROJECT_TASK_PROJECTION_REQUEST_FIELDS,
         populate: {
           path: 'timeOff',
-          select: TIME_OFF_PROJECTION_REQUEST_FIELDS,
+          select: TIME_OFF_POPULATED_REQUEST_FIELDS,
         },
       })
       .populate({
         path: 'timeOff',
-        select: TIME_OFF_PROJECTION_REQUEST_FIELDS,
+        select: TIME_OFF_POPULATED_REQUEST_FIELDS,
       })
       .exec();
     if (!existingProject) {

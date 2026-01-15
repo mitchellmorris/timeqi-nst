@@ -5,9 +5,7 @@ import { IsObjectId } from 'nestjs-object-id';
 import { SchedulingDto } from './create-scheduling.dto';
 import { CreateScenarioDto } from './create-scenario.dto';
 import { Transform } from 'class-transformer';
-
-const objectIdTrnfmr = ({ value }: { value: unknown }) =>
-  value ? new Types.ObjectId(value as string) : value;
+import { objectIdTrnfmr } from './dto-helpers';
 /**
  * Not including entries and users as they are not required for task creation.
  */
