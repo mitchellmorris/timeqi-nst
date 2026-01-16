@@ -128,7 +128,7 @@ describe('TimeOffService', () => {
         name: 'Task Break',
         startDate: '2024-01-01T00:00:00.000Z',
         days: 5,
-        extendedHours: 0,
+        trailingTime: 0,
         target: savedTask._id,
         type: 'Task', // Use string literal if 'type' is string, or use enum if available
       };
@@ -158,7 +158,7 @@ describe('TimeOffService', () => {
         name: 'Company Holiday',
         startDate: '2024-12-25T00:00:00.000Z',
         days: 1,
-        extendedHours: 8,
+        trailingTime: 8,
         target: savedOrganization._id,
         type: 'Organization',
       };
@@ -186,7 +186,7 @@ describe('TimeOffService', () => {
         name: 'Project Break',
         startDate: '2024-06-15T00:00:00.000Z',
         days: 3,
-        extendedHours: 24,
+        trailingTime: 24,
         target: savedProject._id,
         type: 'Project',
       };
@@ -217,7 +217,7 @@ describe('TimeOffService', () => {
         name: 'Database Test TimeOff',
         startDate: '2024-01-01T00:00:00.000Z',
         days: 2,
-        extendedHours: 16,
+        trailingTime: 16,
         target: savedTask._id, // Use a valid ObjectId
         type: 'Task', // Type assertion for now
       };
@@ -242,7 +242,7 @@ describe('TimeOffService', () => {
         name: 'TimeOff 1',
         startDate: '2024-01-01T00:00:00.000Z',
         days: 1,
-        extendedHours: 8,
+        trailingTime: 8,
         target: '507f1f77bcf86cd799439011',
         type: 'Organization',
       });
@@ -250,7 +250,7 @@ describe('TimeOffService', () => {
         name: 'TimeOff 2',
         startDate: '2024-02-01T00:00:00.000Z',
         days: 2,
-        extendedHours: 16,
+        trailingTime: 16,
         target: '507f1f77bcf86cd799439012',
         type: 'Project',
       });
@@ -293,7 +293,7 @@ describe('TimeOffService', () => {
         name: 'Task TimeOff',
         startDate: '2024-01-01T00:00:00.000Z',
         days: 3,
-        extendedHours: 24,
+        trailingTime: 24,
         target: savedTask._id,
         type: 'Task',
       });
@@ -331,7 +331,7 @@ describe('TimeOffService', () => {
         name: 'Organization TimeOff',
         startDate: '2024-01-01T00:00:00.000Z',
         days: 1,
-        extendedHours: 8,
+        trailingTime: 8,
         target: savedOrganization._id,
         type: 'Organization',
       });
@@ -375,7 +375,7 @@ describe('TimeOffService', () => {
         name: 'Project TimeOff',
         startDate: '2024-01-01T00:00:00.000Z',
         days: 2,
-        extendedHours: 16,
+        trailingTime: 16,
         target: savedProject._id,
         type: 'Project',
       });
@@ -414,7 +414,7 @@ describe('TimeOffService', () => {
         name: 'Original Name',
         startDate: '2024-01-01T00:00:00.000Z',
         days: 1,
-        extendedHours: 8,
+        trailingTime: 8,
         target: '507f1f77bcf86cd799439011',
         type: 'Task',
       });
@@ -423,7 +423,7 @@ describe('TimeOffService', () => {
       const updateTimeOffDto: UpdateTimeOffDto = {
         name: 'Updated Name',
         days: 3,
-        extendedHours: 24,
+        trailingTime: 24,
       };
 
       // Act
@@ -464,7 +464,7 @@ describe('TimeOffService', () => {
         name: 'To Be Deleted',
         startDate: '2024-01-01T00:00:00.000Z',
         days: 1,
-        extendedHours: 8,
+        trailingTime: 8,
         target: '507f1f77bcf86cd799439011',
         type: 'Task',
       });

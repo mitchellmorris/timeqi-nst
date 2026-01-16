@@ -22,7 +22,7 @@ export class TimeOff {
   days: number;
 
   @Prop({ type: Number, required: true })
-  extendedHours: number;
+  trailingTime: number;
 
   @Prop({ type: Date, default: Date.now })
   createdAt: Date;
@@ -30,7 +30,7 @@ export class TimeOff {
   @Prop({ type: Date })
   updatedAt: Date;
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }] })
+  @Prop({ type: [Types.ObjectId], ref: 'User' })
   users: Types.ObjectId[] | User[];
   // ObjectId reference to any of the three collections
   @Prop({

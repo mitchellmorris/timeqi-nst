@@ -1,4 +1,10 @@
-import { IsISO8601, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsISO8601,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { Types } from 'mongoose';
 import { IsObjectId } from 'nestjs-object-id';
 import { ITimeOff } from '../interface/time-off.interface';
@@ -8,19 +14,23 @@ export class CreateTimeOffDto {
   @IsNotEmpty()
   readonly name: string;
 
+  @IsString()
+  @IsOptional()
+  readonly description: string;
+
   @IsISO8601()
   @IsNotEmpty()
-  readonly startDate: string;
+  readonly startDate: Date;
 
   @IsNumber()
   readonly days: number;
 
   @IsNumber()
-  readonly extendedHours: number;
+  readonly trailingTime: number;
 
   @IsObjectId()
   @IsNotEmpty()
-  target: Types.ObjectId;
+  readonly target: Types.ObjectId;
 
   @IsString()
   @IsNotEmpty()

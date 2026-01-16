@@ -6,6 +6,10 @@ import { Model } from 'mongoose';
 import { UpdateTaskDto } from '../dto/update-task.dto';
 import { IProject } from '../interface/project.interface';
 import { IUser } from '../interface/user.interface';
+import {
+  TIME_OFF_POPULATED_REQUEST_FIELDS,
+  USER_POPULATED_REQUEST_FIELDS,
+} from '@betavc/timeqi-sh';
 
 @Injectable()
 export class TaskService {
@@ -70,15 +74,14 @@ export class TaskService {
   async getTask(taskId: string): Promise<ITask> {
     const existingTask = await this.taskModel
       .findById(taskId)
-      // These are fetched elsewhere now
-      // .populate({
-      //   path: 'entries',
-      //   select: '_id name',
-      //   populate: {
-      //     path: 'performer',
-      //     select: '_id name',
-      //   },
-      // })
+      .populate({
+        path: 'timeOff',
+        select: TIME_OFF_POPULATED_REQUEST_FIELDS as string[],
+        populate: {
+          path: 'users',
+          select: USER_POPULATED_REQUEST_FIELDS as string[],
+        },
+      })
       .exec();
     if (!existingTask) {
       throw new NotFoundException(`Task #${taskId} not found`);

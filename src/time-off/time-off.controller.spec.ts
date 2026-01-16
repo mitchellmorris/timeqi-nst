@@ -26,7 +26,7 @@ describe('TimeOffController', () => {
     name: 'Annual Leave',
     startDate: '2025-02-15T00:00:00.000Z',
     days: 5,
-    extendedHours: 0,
+    trailingTime: 0,
     target: new Types.ObjectId('507f1f77bcf86cd799439012'),
     type: 'Organization' as const,
     users: [],
@@ -68,7 +68,7 @@ describe('TimeOffController', () => {
       name: 'Annual Leave',
       startDate: '2025-02-15T00:00:00.000Z',
       days: 5,
-      extendedHours: 0,
+      trailingTime: 0,
       target: new Types.ObjectId('507f1f77bcf86cd799439012'),
       type: 'Organization' as const,
     };
@@ -196,19 +196,19 @@ describe('TimeOffController', () => {
 
     it('should handle extended hours for partial days', async () => {
       // Arrange
-      const extendedHoursDto = { ...createTimeOffDto, extendedHours: 4 };
-      const expectedTimeOff = { ...mockTimeOff, extendedHours: 4 };
+      const trailingTimeDto = { ...createTimeOffDto, trailingTime: 4 };
+      const expectedTimeOff = { ...mockTimeOff, trailingTime: 4 };
       mockTimeOffService.createTimeOff.mockResolvedValue(expectedTimeOff);
 
       // Act
       const result: { newTimeOff: typeof expectedTimeOff } =
-        await controller.createTimeOff(extendedHoursDto);
+        await controller.createTimeOff(trailingTimeDto);
 
       // Assert
       expect(timeOffService.createTimeOff).toHaveBeenCalledWith(
-        extendedHoursDto,
+        trailingTimeDto,
       );
-      expect(result.newTimeOff.extendedHours).toBe(4);
+      expect(result.newTimeOff.trailingTime).toBe(4);
     });
   });
 
@@ -217,7 +217,7 @@ describe('TimeOffController', () => {
     const updateTimeOffDto: UpdateTimeOffDto = {
       name: 'Updated Time Off',
       days: 3,
-      extendedHours: 2,
+      trailingTime: 2,
     };
     const updatedTimeOff = { ...mockTimeOff, ...updateTimeOffDto };
 
@@ -662,7 +662,7 @@ describe('TimeOffController', () => {
         name: 'Personal Leave',
         startDate: '2025-03-01T00:00:00.000Z',
         days: 2.5,
-        extendedHours: 4,
+        trailingTime: 4,
         target: new Types.ObjectId(),
         type: 'Organization' as const,
       };
@@ -719,7 +719,7 @@ describe('TimeOffController', () => {
           name: `${type} leave`,
           startDate: '2025-04-01T00:00:00.000Z',
           days: 1,
-          extendedHours: 0,
+          trailingTime: 0,
           target: new Types.ObjectId(),
           type,
         };
@@ -747,7 +747,7 @@ describe('TimeOffController', () => {
           name: 'Date Test',
           startDate,
           days: 1,
-          extendedHours: 0,
+          trailingTime: 0,
           target: new Types.ObjectId(),
           type: 'Task' as const,
         };
